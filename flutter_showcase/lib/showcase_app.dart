@@ -138,8 +138,8 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
             ),
           ),
           
-          // Floating app screen for mobile view
-          if (ResponsiveBreakpoints.of(context).isMobile && _hoveredIndex != -1)
+          // Floating app screen for any view when an item is selected
+          if (_hoveredIndex != -1)
             Positioned(
               bottom: 20,
               right: 20,
