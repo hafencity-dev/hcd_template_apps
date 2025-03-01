@@ -59,6 +59,12 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
         color: Colors.teal.shade700,
         icon: Icons.travel_explore_rounded,
       ),
+      ShowcaseItem(
+        title: 'Music App',
+        description: 'Immersive player with audio visualization',
+        color: Colors.pink.shade700,
+        icon: Icons.music_note_rounded,
+      ),
     ];
   }
 

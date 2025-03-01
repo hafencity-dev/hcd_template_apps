@@ -7,6 +7,7 @@ import '../screens/banking_app.dart';
 import '../screens/fitness_app.dart';
 import '../screens/food_delivery_app.dart';
 import '../screens/travel_app.dart';
+import '../screens/music_app.dart';
 
 class FloatingAppScreen extends StatelessWidget {
   final ShowcaseItem showcaseItem;
@@ -102,6 +103,8 @@ class FloatingAppScreen extends StatelessWidget {
         return FoodDeliveryAppScreen(showcaseItem: showcaseItem);
       case 'Travel App':
         return TravelAppScreen(showcaseItem: showcaseItem);
+      case 'Music App':
+        return MusicAppScreen(showcaseItem: showcaseItem);
       default:
         return _buildGenericApp();
     }
