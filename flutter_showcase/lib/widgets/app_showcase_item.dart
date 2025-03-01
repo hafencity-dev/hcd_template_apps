@@ -123,12 +123,16 @@ class AppShowcaseItem extends StatelessWidget {
   }
 
   Widget _buildFeatureRow() {
-    return Row(
-      children: [
-        _buildFeatureDot('UI/UX'),
-        _buildFeatureDot('Animations'),
-        _buildFeatureDot('Responsive'),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildFeatureDot('UI/UX'),
+          _buildFeatureDot('Animations'),
+          _buildFeatureDot('Responsive'),
+        ],
+      ),
     );
   }
 

@@ -1194,7 +1194,7 @@ class FloatingAppScreen extends StatelessWidget {
                 bottomLeft: Radius.circular(12),
               ),
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 '🍽️',
                 style: TextStyle(fontSize: 40),
@@ -1351,7 +1351,7 @@ class FloatingAppScreen extends StatelessWidget {
             top: 70,
             left: 0,
             right: 0,
-            child: Center(
+            child: const Center(
               child: Text(
                 '🏝️',
                 style: TextStyle(fontSize: 60),
