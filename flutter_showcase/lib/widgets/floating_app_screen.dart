@@ -33,14 +33,43 @@ class FloatingAppScreen extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
-                child: _buildAppContent(),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 600),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOutQuint,
+                        reverseCurve: Curves.easeInQuint,
+                      ),
+                      child: ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutExpo,
+                        ).drive(Tween<double>(begin: 0.9, end: 1.0)),
+                        child: child,
+                      ),
+                    );
+                  },
+                  layoutBuilder: (currentChild, previousChildren) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
+                  child: KeyedSubtree(
+                    key: ValueKey<String>(showcaseItem.title),
+                    child: _buildAppContent(),
+                  ),
+                ),
               ),
             ),
           ),
         ],
-      ).animate()
-        .fadeIn(duration: 300.ms)
-        .slide(begin: const Offset(0.3, 0), end: Offset.zero, duration: 500.ms, curve: Curves.easeOutQuad),
+      ),
     );
   }
 

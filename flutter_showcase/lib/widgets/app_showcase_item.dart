@@ -14,15 +14,20 @@ class AppShowcaseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutQuint,
       height: 160,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: showcaseItem.color.withOpacity(isSelected ? 0.3 : 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: showcaseItem.color.withOpacity(isSelected ? 0.35 : 0.1),
+            blurRadius: isSelected ? 16 : 10,
+            spreadRadius: isSelected ? 2 : 0,
+            offset: isSelected 
+              ? const Offset(0, 7)
+              : const Offset(0, 5),
           ),
         ],
         gradient: LinearGradient(
@@ -30,7 +35,7 @@ class AppShowcaseItem extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             showcaseItem.color,
-            showcaseItem.color.withOpacity(0.8),
+            showcaseItem.color.withOpacity(isSelected ? 0.9 : 0.8),
           ],
         ),
       ),
@@ -104,14 +109,34 @@ class AppShowcaseItem extends StatelessWidget {
           AnimatedOpacity(
             opacity: isSelected ? 1.0 : 0.0,
             duration: 300.ms,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.4),
-                  width: 2,
+            child: Stack(
+              children: [
+                // Glow effect
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(16),
-              ),
+                // Border effect
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.6),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ).animate(target: isSelected ? 1 : 0)
+                  .shimmer(duration: 1200.ms, delay: 300.ms),
+              ],
             ),
           ),
         ],

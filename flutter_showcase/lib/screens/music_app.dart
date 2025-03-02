@@ -166,20 +166,31 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
+                      // Outer glow that pulsates with music
                       BoxShadow(
-                        color: trackColor.withOpacity(0.4),
-                        blurRadius: 30,
-                        spreadRadius: 5,
+                        color: trackColor.withOpacity(_isPlaying ? 0.5 : 0.3),
+                        blurRadius: _isPlaying ? 
+                          30 + (math.sin(_animationController.value * math.pi * 2) * 10) : 
+                          30,
+                        spreadRadius: _isPlaying ? 
+                          5 + (math.sin(_animationController.value * math.pi * 2) * 2) : 
+                          5,
                         offset: const Offset(0, 10),
                       ),
                     ],
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    gradient: SweepGradient(
+                      center: Alignment.center,
+                      startAngle: 0,
+                      endAngle: math.pi * 2,
                       colors: [
+                        trackColor.withOpacity(0.9),
+                        trackColor.withOpacity(0.7),
                         trackColor.withOpacity(0.8),
-                        trackColor.withOpacity(0.5),
+                        trackColor.withOpacity(0.6),
+                        trackColor.withOpacity(0.9),
                       ],
+                      stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
+                      transform: GradientRotation(_animationController.value * math.pi * 2),
                     ),
                   ),
                   child: Center(
@@ -251,15 +262,39 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
               AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) {
-                  return SizedBox(
-                    height: 40,
-                    child: CustomPaint(
-                      painter: MusicVisualizerPainter(
-                        trackColor, 
-                        _animationController.value,
-                        _isPlaying,
+                  return Hero(
+                    tag: 'music_visualizer',
+                    flightShuttleBuilder: (
+                      BuildContext flightContext,
+                      Animation<double> animation,
+                      HeroFlightDirection flightDirection,
+                      BuildContext fromHeroContext,
+                      BuildContext toHeroContext,
+                    ) {
+                      return AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, _) {
+                          return CustomPaint(
+                            painter: MusicVisualizerPainter(
+                              trackColor, 
+                              _animationController.value,
+                              _isPlaying,
+                            ),
+                            size: const Size(double.infinity, 40),
+                          );
+                        },
+                      );
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: CustomPaint(
+                        painter: MusicVisualizerPainter(
+                          trackColor, 
+                          _animationController.value,
+                          _isPlaying,
+                        ),
+                        size: const Size(double.infinity, 40),
                       ),
-                      size: const Size(double.infinity, 40),
                     ),
                   );
                 },
@@ -395,7 +430,12 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
                       if (_isPlaying) {
                         _animationController.repeat();
                       } else {
-                        _animationController.stop();
+                        // For smoother pause, don't abruptly stop
+                        _animationController.animateTo(
+                          _animationController.value + 0.1, 
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        ).then((_) => _animationController.stop());
                       }
                     });
                   },
@@ -567,9 +607,20 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
     return GestureDetector(
       onTap: () {
         setState(() {
-          _currentTrackIndex = index;
-          _isPlaying = true;
-          _animationController.repeat();
+          // Add visual feedback with smooth transitions
+          _isPlaying = false;
+          // For smoother transition
+          _animationController.animateTo(
+            _animationController.value + 0.05,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          ).then((_) {
+            setState(() {
+              _currentTrackIndex = index;
+              _isPlaying = true;
+              _animationController.repeat();
+            });
+          });
         });
       },
       child: Container(
@@ -784,13 +835,14 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.0,
                       colors: [
-                        trackColor,
+                        trackColor.withOpacity(1.0),
                         trackColor.withOpacity(0.7),
                       ],
+                      stops: const [0.2, 1.0],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -849,7 +901,8 @@ class MusicVisualizerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..style = PaintingStyle.fill;
+      ..style = PaintingStyle.fill
+      ..strokeCap = StrokeCap.round;
     
     // Number of bars in the visualizer
     const barCount = 30;
@@ -874,6 +927,7 @@ class MusicVisualizerPainter extends CustomPainter {
       final variableHeight = size.height * 0.7;
       final barHeight = minHeight + (variableHeight * normalizedHeight);
       
+      // Enhanced bar visual with better curvature
       final rect = RRect.fromRectAndRadius(
         Rect.fromLTWH(
           i * (barWidth * 1.5),
@@ -884,7 +938,46 @@ class MusicVisualizerPainter extends CustomPainter {
         const Radius.circular(4),
       );
       
-      canvas.drawRRect(rect, paint);
+      // Add gradient to each bar for more depth
+      final barPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            color.withOpacity(1.0),
+            color.withOpacity(0.7),
+          ],
+        ).createShader(
+          Rect.fromLTWH(
+            i * (barWidth * 1.5),
+            size.height - barHeight,
+            barWidth,
+            barHeight,
+          ),
+        )
+        ..style = PaintingStyle.fill
+        ..strokeCap = StrokeCap.round;
+      
+      // Apply small glow effect if active
+      if (isActive && normalizedHeight > 0.7) {
+        final glowPaint = Paint()
+          ..color = color.withOpacity(0.3)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+        
+        final glowRect = RRect.fromRectAndRadius(
+          Rect.fromLTWH(
+            i * (barWidth * 1.5) - 2,
+            size.height - barHeight - 2,
+            barWidth + 4,
+            barHeight + 4,
+          ),
+          const Radius.circular(5),
+        );
+        
+        canvas.drawRRect(glowRect, glowPaint);
+      }
+      
+      canvas.drawRRect(rect, barPaint);
     }
   }
   

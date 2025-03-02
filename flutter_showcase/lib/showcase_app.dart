@@ -19,6 +19,9 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
   late final AnimationController _controller;
   late final List<ShowcaseItem> _showcaseItems;
   int _hoveredIndex = -1;
+  int _targetIndex = -1; // This is the index we're transitioning to
+  ShowcaseItem? _previousItem;
+  bool _isClosing = false; // Track when we're in the closing phase
 
   @override
   void initState() {
@@ -145,14 +148,50 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
           ),
           
           // Floating app screen for any view when an item is selected
-          if (_hoveredIndex != -1)
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: FloatingAppScreen(
-                showcaseItem: _showcaseItems[_hoveredIndex],
+          // App display with sequential animations
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOutBack,
+            bottom: _hoveredIndex != -1 ? 20 : -700,
+            right: 20,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+              opacity: _hoveredIndex != -1 ? 1.0 : 0.0,
+              child: AnimatedScale(
+                duration: const Duration(milliseconds: 400),
+                scale: _hoveredIndex != -1 ? 1.0 : 0.8,
+                curve: Curves.easeOutQuint,
+                child: SizedBox(
+                  width: 340,
+                  height: 650,
+                  child: _hoveredIndex != -1
+                    ? FloatingAppScreen(
+                        showcaseItem: _showcaseItems[_hoveredIndex],
+                      )
+                    : _previousItem != null
+                      ? FloatingAppScreen(
+                          showcaseItem: _previousItem!,
+                        )
+                      : const SizedBox.shrink(),
+                ),
               ),
             ),
+            onEnd: () {
+              // If we're closing and there's a target index, open it now
+              if (_isClosing && _targetIndex != -1) {
+                setState(() {
+                  _hoveredIndex = _targetIndex;
+                  _targetIndex = -1;
+                  _isClosing = false;
+                });
+              } else if (_isClosing) {
+                setState(() {
+                  _isClosing = false;
+                });
+              }
+            },
+          ),
         ],
       ),
     );
@@ -168,9 +207,29 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () {
-              setState(() {
-                _hoveredIndex = _hoveredIndex == index ? -1 : index;
-              });
+              if (_hoveredIndex == -1 && !_isClosing) {
+                // No app open, simple open animation
+                setState(() {
+                  _hoveredIndex = index;
+                  _previousItem = null;
+                });
+              } else if (_hoveredIndex == index) {
+                // Close the current app
+                setState(() {
+                  _previousItem = _showcaseItems[_hoveredIndex];
+                  _hoveredIndex = -1;
+                  _isClosing = true;
+                  _targetIndex = -1; // No follow-up app to open
+                });
+              } else {
+                // Switch from one app to another with sequential animation
+                setState(() {
+                  _previousItem = _showcaseItems[_hoveredIndex];
+                  _targetIndex = index; // App to open after closing
+                  _hoveredIndex = -1;
+                  _isClosing = true;
+                });
+              }
             },
             child: AppShowcaseItem(
               showcaseItem: _showcaseItems[index],
@@ -207,8 +266,49 @@ class _ShowcaseAppState extends State<ShowcaseApp> with SingleTickerProviderStat
         itemCount: _showcaseItems.length,
         itemBuilder: (context, index) {
           return MouseRegion(
-            onEnter: (_) => setState(() => _hoveredIndex = index),
-            onExit: (_) => setState(() => _hoveredIndex = -1),
+            onEnter: (_) {
+              if (_hoveredIndex == -1 && !_isClosing) {
+                // No app open, simple open animation
+                setState(() {
+                  _hoveredIndex = index;
+                  _previousItem = null;
+                });
+              } else if (_hoveredIndex != index) {
+                // If we're already closing and going to a new target, just update target
+                if (_isClosing) {
+                  setState(() {
+                    _targetIndex = index;
+                  });
+                  return;
+                }
+                
+                // Start the closing animation with a target to open next
+                setState(() {
+                  _previousItem = _showcaseItems[_hoveredIndex];
+                  _targetIndex = index; // App to open after closing
+                  _hoveredIndex = -1;
+                  _isClosing = true;
+                });
+              }
+            },
+            onExit: (_) {
+              // If this is our target for the next open and we're moving away
+              if (_targetIndex == index) {
+                setState(() {
+                  _targetIndex = -1; // Clear the target
+                });
+              }
+              
+              // If this is the currently open app, close it
+              if (_hoveredIndex == index && !_isClosing) {
+                setState(() {
+                  _previousItem = _showcaseItems[_hoveredIndex];
+                  _hoveredIndex = -1;
+                  _isClosing = true;
+                  _targetIndex = -1;
+                });
+              }
+            },
             child: AppShowcaseItem(
               showcaseItem: _showcaseItems[index],
               isSelected: _hoveredIndex == index,
