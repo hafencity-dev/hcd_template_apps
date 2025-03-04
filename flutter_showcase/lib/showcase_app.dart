@@ -185,90 +185,122 @@ class _ShowcaseAppState extends State<ShowcaseApp>
   }
 
   Widget _buildDesktopLayout() {
-    return Row(
-      children: [
-        // App items section (2/3 of screen width)
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: MasonryGridView.count(
-              crossAxisCount: ResponsiveValue<int>(
-                context,
-                defaultValue: 2,
-                conditionalValues: [
-                  const Condition.largerThan(name: TABLET, value: 3),
-                  const Condition.largerThan(
-                      name: DESKTOP, value: 3), // Reduced max columns to 3
-                ],
-              ).value,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              itemCount: _showcaseItems.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      _hoveredIndex = index;
-                      _previousItem = null;
-                    });
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // App items section (2/3 of screen width)
+          Expanded(
+            flex: 2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: MasonryGridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: ResponsiveValue<int>(
+                    context,
+                    defaultValue: 2,
+                    conditionalValues: [
+                      const Condition.largerThan(name: TABLET, value: 3),
+                      const Condition.largerThan(
+                          name: DESKTOP, value: 3), // Reduced max columns to 3
+                    ],
+                  ).value,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  itemCount: _showcaseItems.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          _hoveredIndex = index;
+                          _previousItem = null;
+                        });
+                      },
+                      onHover: (isHovering) {
+                        if (isHovering) {
+                          setState(() {
+                            _hoveredIndex = index;
+                            _previousItem = null;
+                          });
+                        }
+                      },
+                      child: AppShowcaseItem(
+                        showcaseItem: _showcaseItems[index],
+                        isSelected: _hoveredIndex == index,
+                      ),
+                    )
+                        .animate()
+                        .fade(duration: 600.ms, delay: (200 * index).ms)
+                        .scale(
+                            begin: const Offset(0.9, 0.9),
+                            end: const Offset(1.0, 1.0),
+                            duration: 600.ms,
+                            delay: (200 * index).ms);
                   },
-                  onHover: (isHovering) {
-                    if (isHovering) {
-                      setState(() {
-                        _hoveredIndex = index;
-                        _previousItem = null;
-                      });
-                    }
-                  },
-                  child: AppShowcaseItem(
-                    showcaseItem: _showcaseItems[index],
-                    isSelected: _hoveredIndex == index,
-                  ),
-                )
-                    .animate()
-                    .fade(duration: 600.ms, delay: (200 * index).ms)
-                    .scale(
-                        begin: const Offset(0.9, 0.9),
-                        end: const Offset(1.0, 1.0),
-                        duration: 600.ms,
-                        delay: (200 * index).ms);
-              },
-            ),
-          ),
-        ),
-
-        // App preview section (1/3 of screen width)
-        Expanded(
-          flex: 1,
-          child: Center(
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 500),
-              opacity: _hoveredIndex != -1 ? 1.0 : 0.5,
-              child: AnimatedScale(
-                duration: const Duration(milliseconds: 400),
-                scale: _hoveredIndex != -1 ? 1.0 : 0.9,
-                curve: Curves.easeOutQuint,
-                child: SizedBox(
-                  width: 300,
-                  height: 600,
-                  child: _hoveredIndex != -1
-                      ? FloatingAppScreen(
-                          showcaseItem: _showcaseItems[_hoveredIndex],
-                        )
-                      : _previousItem != null
-                          ? FloatingAppScreen(
-                              showcaseItem: _previousItem!,
-                            )
-                          : FloatingAppScreen(
-                              showcaseItem: _showcaseItems[0],
-                            ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+
+          // App preview section (1/3 of screen width)
+          Expanded(
+            flex: 1,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                  ),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: AspectRatio(
+                        aspectRatio: 9 / 19.5, // iPhone aspect ratio
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 500),
+                          opacity: _hoveredIndex != -1 ? 1.0 : 0.5,
+                          child: AnimatedScale(
+                            duration: const Duration(milliseconds: 400),
+                            scale: _hoveredIndex != -1 ? 1.0 : 0.9,
+                            curve: Curves.easeOutQuint,
+                            child: _hoveredIndex != -1
+                                ? FloatingAppScreen(
+                                    showcaseItem: _showcaseItems[_hoveredIndex],
+                                  )
+                                : _previousItem != null
+                                    ? FloatingAppScreen(
+                                        showcaseItem: _previousItem!,
+                                      )
+                                    : FloatingAppScreen(
+                                        showcaseItem: _showcaseItems[0],
+                                      ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

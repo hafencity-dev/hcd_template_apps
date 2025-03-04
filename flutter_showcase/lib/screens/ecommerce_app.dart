@@ -126,26 +126,31 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen> with SingleTick
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    _selectedCategoryIndex == 0 ? 'Popular Products' : _categories[_selectedCategoryIndex]['name'] + ' Products',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Expanded(
+                    child: Text(
+                      _selectedCategoryIndex == 0 ? 'Popular Products' : _categories[_selectedCategoryIndex]['name'] + ' Products',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16, // Smaller font size
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min, // Keep row as small as possible
                     children: [
                       Text(
                         'View All',
                         style: TextStyle(
                           color: widget.showcaseItem.color,
                           fontWeight: FontWeight.w500,
+                          fontSize: 12, // Smaller font size
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 2), // Smaller spacing
                       Icon(
                         Icons.arrow_forward_ios,
-                        size: 12,
+                        size: 10, // Smaller icon
                         color: widget.showcaseItem.color,
                       ),
                     ],
@@ -352,7 +357,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen> with SingleTick
   
   Widget _buildFeatureCarousel() {
     return SizedBox(
-      height: 220, // Increased height to avoid overflow
+      height: 240, // Further increased height to avoid overflow
       child: Padding(
         padding: const EdgeInsets.only(top: 16),
         child: PageView.builder(
@@ -512,14 +517,14 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen> with SingleTick
                                             banner['buttonText'],
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 12, // Smaller font size
+                                              fontSize: 11, // Even smaller font size
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        const SizedBox(width: 4),
-                                        const Icon(Icons.arrow_forward_rounded, size: 14),
+                                        const SizedBox(width: 3),
+                                        const Icon(Icons.arrow_forward_rounded, size: 12), // Smaller icon
                                       ],
                                     ),
                                   ),
