@@ -42,17 +42,6 @@ class _InteractiveBackgroundState extends State<InteractiveBackground> {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              // Replace blue shades with lighter and darker versions of the main green color
-              mainColor.withOpacity(0.3),
-              mainColor.withOpacity(0.5),
-            ],
-          ),
-        ),
         child: AnimatedBuilder(
           animation: widget.controller,
           builder: (context, child) {
