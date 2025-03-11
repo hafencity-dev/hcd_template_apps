@@ -37,18 +37,32 @@ class FloatingAppScreen extends StatelessWidget {
                   duration: const Duration(milliseconds: 600),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
+                    // Create a combined animation that's both efficient and smooth
+                    // Use the standard Flutter animation primitives to avoid unnecessary rebuilds
                     return FadeTransition(
                       opacity: CurvedAnimation(
                         parent: animation,
-                        curve: Curves.easeOutQuint,
-                        reverseCurve: Curves.easeInQuint,
+                        curve: Curves.easeOutCubic,
+                        reverseCurve: Curves.easeInCubic,
                       ),
-                      child: ScaleTransition(
-                        scale: CurvedAnimation(
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.0),
+                          end: Offset.zero,
+                        ).animate(CurvedAnimation(
                           parent: animation,
-                          curve: Curves.easeOutExpo,
-                        ).drive(Tween<double>(begin: 0.9, end: 1.0)),
-                        child: child,
+                          curve: Curves.easeOutCubic,
+                        )),
+                        child: ScaleTransition(
+                          scale: Tween<double>(
+                            begin: 1.1,
+                            end: 1.0,
+                          ).animate(CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeOutCubic,
+                          )),
+                          child: child,
+                        ),
                       ),
                     );
                   },
