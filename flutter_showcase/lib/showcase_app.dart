@@ -107,25 +107,34 @@ class _ShowcaseAppState extends State<ShowcaseApp>
 
   // Method to scroll to the selected item
   void _scrollToSelectedItem() {
-    // Calculate approximate position of the selected item
-    double itemWidth = MediaQuery.of(context).size.width > 600
-        ? 296.0
-        : 236.0; // width + padding
-    double scrollOffset = _selectedIndex * itemWidth;
+    // Calculate precise position of the selected item based on actual item widths
+    double mobileItemWidth = 220 + 16; // Item width + right padding
+    double desktopItemWidth = 280 + 16; // Item width + right padding
 
-    // Scroll mobile layout - with smoother animation
+    // Calculate exact scroll positions for both layouts
+    double mobileScrollOffset = _selectedIndex * mobileItemWidth;
+    double desktopScrollOffset = _selectedIndex * desktopItemWidth;
+
+    // Apply bounds to prevent overshooting
     if (_mobileScrollController.hasClients) {
+      final double maxScroll = _mobileScrollController.position.maxScrollExtent;
+      mobileScrollOffset = mobileScrollOffset.clamp(0.0, maxScroll);
+
       _mobileScrollController.animateTo(
-        scrollOffset,
+        mobileScrollOffset,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeOutCubic,
       );
     }
 
-    // Scroll desktop layout - with smoother animation
+    // Apply bounds to prevent overshooting
     if (_desktopScrollController.hasClients) {
+      final double maxScroll =
+          _desktopScrollController.position.maxScrollExtent;
+      desktopScrollOffset = desktopScrollOffset.clamp(0.0, maxScroll);
+
       _desktopScrollController.animateTo(
-        scrollOffset,
+        desktopScrollOffset,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeOutCubic,
       );
@@ -260,10 +269,16 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                 scale: 1.0,
                 curve: Curves.easeOutQuint,
                 child: SizedBox(
-                  width: 200, // Smaller for mobile layout
-                  height: double.infinity,
-                  child: FloatingAppScreen(
-                    showcaseItem: _showcaseItems[_selectedIndex],
+                  width: 200, // Fixed width for phone display
+                  child: OverflowBox(
+                    maxHeight: double.infinity, // Allow overflow at bottom
+                    alignment: Alignment.topCenter,
+                    child: AspectRatio(
+                      aspectRatio: 9 / 19.5, // Standard phone aspect ratio
+                      child: FloatingAppScreen(
+                        showcaseItem: _showcaseItems[_selectedIndex],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -339,42 +354,47 @@ class _ShowcaseAppState extends State<ShowcaseApp>
           ),
 
           // App preview section (1/3 of screen width)
-          Expanded(
-            flex: 1,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                  color: Colors.white,
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: AspectRatio(
-                        aspectRatio: 9 / 19.5, // iPhone aspect ratio
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 500),
-                          opacity: 1.0,
-                          child: AnimatedScale(
-                            duration: const Duration(milliseconds: 400),
-                            scale: 1.0,
-                            curve: Curves.easeOutQuint,
-                            child: FloatingAppScreen(
-                              showcaseItem: _showcaseItems[_selectedIndex],
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      // Fixed width for phone display
+                      width: 300,
+                      child: OverflowBox(
+                        maxHeight: double.infinity, // Allow overflow at bottom
+                        alignment: Alignment.topCenter,
+                        child: AspectRatio(
+                          aspectRatio: 9 / 18, // Standard phone aspect ratio
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 500),
+                            opacity: 1.0,
+                            child: AnimatedScale(
+                              duration: const Duration(milliseconds: 400),
+                              scale: 1.0,
+                              curve: Curves.easeOutQuint,
+                              child: FloatingAppScreen(
+                                showcaseItem: _showcaseItems[_selectedIndex],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
