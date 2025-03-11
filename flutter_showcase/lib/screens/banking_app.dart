@@ -49,7 +49,7 @@ class BankingAppScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Welcome back',
+                      'Willkommen zurück',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
@@ -139,7 +139,7 @@ class BankingAppScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Total Balance',
+                            'Gesamtsaldo',
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 12,
@@ -217,9 +217,9 @@ class BankingAppScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildCardOption('Accounts', Icons.credit_card, delay: 800.ms),
-                      _buildCardOption('Payments', Icons.payments_outlined, delay: 900.ms),
-                      _buildCardOption('Analytics', Icons.analytics_outlined, delay: 1000.ms),
+                      _buildCardOption('Konten', Icons.credit_card, delay: 800.ms),
+                      _buildCardOption('Zahlungen', Icons.payments_outlined, delay: 900.ms),
+                      _buildCardOption('Analysen', Icons.analytics_outlined, delay: 1000.ms),
                     ],
                   ),
                 ],
@@ -240,10 +240,10 @@ class BankingAppScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildQuickAction('Send', Icons.send, Colors.green, delay: 800.ms),
-                _buildQuickAction('Receive', Icons.call_received, Colors.blue, delay: 900.ms),
-                _buildQuickAction('Pay', Icons.payment, Colors.orange, delay: 1000.ms),
-                _buildQuickAction('More', Icons.more_horiz, Colors.purple, delay: 1100.ms),
+                _buildQuickAction('Senden', Icons.send, Colors.green, delay: 800.ms),
+                _buildQuickAction('Empfangen', Icons.call_received, Colors.blue, delay: 900.ms),
+                _buildQuickAction('Bezahlen', Icons.payment, Colors.orange, delay: 1000.ms),
+                _buildQuickAction('Mehr', Icons.more_horiz, Colors.purple, delay: 1100.ms),
               ],
             ),
           ),
@@ -273,7 +273,7 @@ class BankingAppScreen extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        'Recent Transactions',
+                        'Neueste Transaktionen',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -287,7 +287,7 @@ class BankingAppScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          'See All',
+                          'Alle anzeigen',
                           style: TextStyle(
                             color: showcaseItem.color,
                             fontWeight: FontWeight.bold,
@@ -304,32 +304,32 @@ class BankingAppScreen extends StatelessWidget {
                     child: ListView(
                       children: [
                         _buildTransactionItem(
-                          'Starbucks Coffee',
-                          'Today, 9:32 AM',
+                          'Starbucks Kaffee',
+                          'Heute, 9:32 Uhr',
                           '-\$4.50',
                           Icons.coffee,
                           Colors.brown,
                           delay: 1200.ms,
                         ),
                         _buildTransactionItem(
-                          'Amazon Shopping',
-                          'Yesterday, 5:20 PM',
+                          'Amazon Einkauf',
+                          'Gestern, 17:20 Uhr',
                           '-\$67.30',
                           Icons.shopping_cart_outlined,
                           Colors.amber.shade800,
                           delay: 1300.ms,
                         ),
                         _buildTransactionItem(
-                          'Grocery Store',
-                          'Yesterday, 3:15 PM',
+                          'Supermarkt',
+                          'Gestern, 15:15 Uhr',
                           '-\$28.75',
                           Icons.shopping_basket,
                           Colors.green,
                           delay: 1400.ms,
                         ),
                         _buildTransactionItem(
-                          'Salary Deposit',
-                          'Mar 1, 10:00 AM',
+                          'Gehaltseingang',
+                          '1. Mär, 10:00 Uhr',
                           '+\$2,450.00',
                           Icons.account_balance,
                           Colors.blue,

@@ -26,7 +26,7 @@ class FloatingAppScreen extends StatelessWidget {
         children: [
           // Phone frame
           _buildPhoneFrame(),
-          
+
           // App screen content
           Positioned.fill(
             child: Padding(
@@ -35,7 +35,8 @@ class FloatingAppScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 600),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
                     return FadeTransition(
                       opacity: CurvedAnimation(
                         parent: animation,
@@ -100,7 +101,7 @@ class FloatingAppScreen extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Notch
           Align(
             alignment: Alignment.topCenter,
@@ -120,20 +121,21 @@ class FloatingAppScreen extends StatelessWidget {
   }
 
   Widget _buildAppContent() {
-    // Select the appropriate app UI based on the showcase item
-    switch (showcaseItem.title) {
-      case 'E-Commerce App':
+    // Select the appropriate app UI based on the showcase item type
+    switch (showcaseItem.type) {
+      case AppType.ecommerce:
         return ECommerceAppScreen(showcaseItem: showcaseItem);
-      case 'Banking App':
+      case AppType.banking:
         return BankingAppScreen(showcaseItem: showcaseItem);
-      case 'Fitness Tracker':
+      case AppType.fitness:
         return FitnessAppScreen(showcaseItem: showcaseItem);
-      case 'Food Delivery':
+      case AppType.foodDelivery:
         return FoodDeliveryAppScreen(showcaseItem: showcaseItem);
-      case 'Travel App':
+      case AppType.travel:
         return TravelAppScreen(showcaseItem: showcaseItem);
-      case 'Music App':
+      case AppType.music:
         return MusicAppScreen(showcaseItem: showcaseItem);
+      case AppType.generic:
       default:
         return _buildGenericApp();
     }

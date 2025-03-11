@@ -57,7 +57,7 @@ class DashboardTab extends StatelessWidget {
           child: Row(
             children: [
               const Text(
-                'Dashboard',
+                'Übersicht',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -171,7 +171,7 @@ class DashboardTab extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      'Good morning,',
+                      'Guten Morgen,',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
@@ -194,7 +194,7 @@ class DashboardTab extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Let\'s reach your fitness goals today!',
+                  'Erreiche heute deine Fitnessziele!',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontSize: 11,
@@ -228,7 +228,7 @@ class DashboardTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Today\'s Progress',
+                'Heutiger Fortschritt',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -271,7 +271,7 @@ class DashboardTab extends StatelessWidget {
                 child: ProgressRing(
                   value: stepsTaken / stepsGoal,
                   icon: Icons.directions_walk,
-                  title: 'STEPS',
+                  title: 'SCHRITTE',
                   currentValue: '${stepsTaken.toInt()}',
                   goal: '${stepsGoal.toInt()}',
                   color: mainColor,
@@ -287,7 +287,7 @@ class DashboardTab extends StatelessWidget {
                 child: ProgressRing(
                   value: caloriesBurned / calorieGoal,
                   icon: Icons.local_fire_department,
-                  title: 'CALORIES',
+                  title: 'KALORIEN',
                   currentValue: '${caloriesBurned.toInt()}',
                   goal: '${calorieGoal.toInt()}',
                   color: Colors.orange,
@@ -303,7 +303,7 @@ class DashboardTab extends StatelessWidget {
                 child: ProgressRing(
                   value: activeMinutes / activeMinutesGoal,
                   icon: Icons.timer,
-                  title: 'MINUTES',
+                  title: 'MINUTEN',
                   currentValue: '${activeMinutes.toInt()}',
                   goal: '${activeMinutesGoal.toInt()}',
                   color: Colors.purple,
@@ -341,7 +341,7 @@ class DashboardTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Activity Summary',
+                'Aktivitätsübersicht',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -351,7 +351,7 @@ class DashboardTab extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'This Week',
+                    'Diese Woche',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontSize: 11,
@@ -378,13 +378,13 @@ class DashboardTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-              Text('Mon', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Tue', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Wed', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Thu', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Fri', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Sat', style: TextStyle(color: Colors.white70, fontSize: 9)),
-              Text('Sun', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Mo', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Di', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Mi', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Do', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Fr', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('Sa', style: TextStyle(color: Colors.white70, fontSize: 9)),
+              Text('So', style: TextStyle(color: Colors.white70, fontSize: 9)),
             ],
           ),
           const SizedBox(height: 12),
@@ -392,20 +392,20 @@ class DashboardTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildActivityIndicator(
-                label: 'Best Day',
-                value: 'Friday',
+                label: 'Bester Tag',
+                value: 'Freitag',
                 icon: Icons.emoji_events,
                 color: Colors.amber,
               ),
               _buildActivityIndicator(
-                label: 'Streak',
-                value: '7 days',
+                label: 'Serie',
+                value: '7 Tage',
                 icon: Icons.local_fire_department,
                 color: Colors.orange,
               ),
               _buildActivityIndicator(
-                label: 'Completed',
-                value: '12 workouts',
+                label: 'Abgeschlossen',
+                value: '12 Workouts',
                 icon: Icons.check_circle,
                 color: Colors.green,
               ),
@@ -493,7 +493,7 @@ class DashboardTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Recommended Workout',
+                        'Empfohlenes Workout',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -502,7 +502,7 @@ class DashboardTab extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'Based on your fitness goals',
+                        'Basierend auf deinen Fitnesszielen',
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 10,
@@ -538,7 +538,7 @@ class DashboardTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Upper Body Strength',
+                  'Oberkörper-Kraft',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -549,17 +549,17 @@ class DashboardTab extends StatelessWidget {
                 Row(
                   children: [
                     ExerciseItem(
-                      name: 'Push Ups',
-                      sets: '3 sets',
-                      reps: '12 reps',
+                      name: 'Liegestütze',
+                      sets: '3 Sätze',
+                      reps: '12 Wdh.',
                       icon: Icons.fitness_center,
                       color: Colors.blue,
                     ),
                     const SizedBox(width: 12),
                     ExerciseItem(
-                      name: 'Dumbbell Press',
-                      sets: '4 sets',
-                      reps: '10 reps',
+                      name: 'Kurzhantel-Drücken',
+                      sets: '4 Sätze',
+                      reps: '10 Wdh.',
                       icon: Icons.fitness_center,
                       color: Colors.red,
                     ),
@@ -569,17 +569,17 @@ class DashboardTab extends StatelessWidget {
                 Row(
                   children: [
                     ExerciseItem(
-                      name: 'Pull Ups',
-                      sets: '3 sets',
-                      reps: '8 reps',
+                      name: 'Klimmzüge',
+                      sets: '3 Sätze',
+                      reps: '8 Wdh.',
                       icon: Icons.fitness_center,
                       color: Colors.purple,
                     ),
                     const SizedBox(width: 12),
                     ExerciseItem(
-                      name: 'Bicep Curls',
-                      sets: '3 sets',
-                      reps: '12 reps',
+                      name: 'Bizeps-Curls',
+                      sets: '3 Sätze',
+                      reps: '12 Wdh.',
                       icon: Icons.fitness_center,
                       color: Colors.green,
                     ),
@@ -611,7 +611,7 @@ class DashboardTab extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Start Workout',
+                              'Workout starten',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -643,7 +643,7 @@ class DashboardTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Weekly Performance',
+          'Wöchentliche Leistung',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -654,7 +654,7 @@ class DashboardTab extends StatelessWidget {
         Row(
           children: [
             _buildStatCard(
-              title: 'Heart Rate',
+              title: 'Herzfrequenz',
               value: '72 bpm',
               icon: Icons.favorite,
               color: Colors.red,
@@ -664,7 +664,7 @@ class DashboardTab extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             _buildStatCard(
-              title: 'Sleep',
+              title: 'Schlaf',
               value: '7h 20m',
               icon: Icons.nightlight_round,
               color: Colors.indigo,
@@ -678,7 +678,7 @@ class DashboardTab extends StatelessWidget {
         Row(
           children: [
             _buildStatCard(
-              title: 'Weight',
+              title: 'Gewicht',
               value: '78.5 kg',
               icon: Icons.monitor_weight,
               color: Colors.teal,

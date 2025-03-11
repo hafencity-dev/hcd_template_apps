@@ -115,11 +115,11 @@ class _FitnessAppScreenState extends State<FitnessAppScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.dashboard_outlined, 'Home'),
+          _buildNavItem(0, Icons.dashboard_outlined, 'Start'),
           _buildNavItem(1, Icons.fitness_center_outlined, 'Workouts'),
           const SizedBox(width: 60), // Space for FAB
-          _buildNavItem(2, Icons.restaurant_outlined, 'Nutrition'),
-          _buildNavItem(3, Icons.person_outline, 'Profile'),
+          _buildNavItem(2, Icons.restaurant_outlined, 'Ernährung'),
+          _buildNavItem(3, Icons.person_outline, 'Profil'),
         ],
       ),
     );
@@ -168,7 +168,7 @@ class _FitnessAppScreenState extends State<FitnessAppScreen> {
           // Show a snackbar when FAB is pressed in the demo
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Add new workout or activity'),
+              content: const Text('Neues Workout oder Aktivität hinzufügen'),
               backgroundColor: widget.showcaseItem.color,
               behavior: SnackBarBehavior.floating,
               duration: const Duration(seconds: 1),
