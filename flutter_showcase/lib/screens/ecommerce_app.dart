@@ -1057,35 +1057,22 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 350),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0.05, 0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                );
-              },
-              child: Text(
-                _selectedCategoryIndex == 0
-                    ? 'Beliebte Produkte'
-                    : '${_categories[_selectedCategoryIndex]['name']} Produkte',
-                key: ValueKey<int>(_selectedCategoryIndex),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  letterSpacing: -0.3,
-                ),
-                overflow: TextOverflow.ellipsis,
+            child: Text(
+              _selectedCategoryIndex == 0
+                  ? 'Beliebte Produkte'
+                  : '${_categories[_selectedCategoryIndex]['name']} Produkte',
+              key: ValueKey<int>(_selectedCategoryIndex),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                letterSpacing: -0.3,
               ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
             ),
           ),
           _GlassmorphicContainer(
@@ -1114,7 +1101,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Alle anzeigen',
+                    'Alle',
                     style: TextStyle(
                       color: widget.showcaseItem.color,
                       fontWeight: FontWeight.w600,
@@ -1379,7 +1366,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      '\$${(double.parse((product['price'] as String).substring(1)) * 1.25).toStringAsFixed(2)}',
+                                      product['price'] as String,
                                       style: TextStyle(
                                         color: Colors.grey.shade400,
                                         fontWeight: FontWeight.normal,
@@ -1548,8 +1535,8 @@ class _GlassmorphicContainer extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: Container(
-          width: width,
           height: height,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
             gradient: linearGradient,

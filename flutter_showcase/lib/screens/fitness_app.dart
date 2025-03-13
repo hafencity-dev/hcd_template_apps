@@ -117,7 +117,6 @@ class _FitnessAppScreenState extends State<FitnessAppScreen> {
         children: [
           _buildNavItem(0, Icons.dashboard_outlined, 'Start'),
           _buildNavItem(1, Icons.fitness_center_outlined, 'Workouts'),
-          const SizedBox(width: 60), // Space for FAB
           _buildNavItem(2, Icons.restaurant_outlined, 'Ernährung'),
           _buildNavItem(3, Icons.person_outline, 'Profil'),
         ],

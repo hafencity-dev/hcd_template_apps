@@ -66,7 +66,7 @@ class ExerciseItem extends StatelessWidget {
                           fontSize: 10,
                         ),
                       ),
-                      Text(
+                      /*Text(
                         ' • ',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.5),
@@ -79,7 +79,7 @@ class ExerciseItem extends StatelessWidget {
                           color: Colors.white.withOpacity(0.7),
                           fontSize: 10,
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ],

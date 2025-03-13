@@ -937,7 +937,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                         children: [
                           Text(
                             _selectedCategoryIndex == 0
-                                ? 'Restaurants in der Nähe'
+                                ? 'In der Nähe'
                                 : '${_categories[_selectedCategoryIndex]['name']} Orte',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
