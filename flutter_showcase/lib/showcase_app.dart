@@ -152,6 +152,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
             });
           },
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
               // Interactive animated background
               InteractiveBackground(
@@ -250,6 +251,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
           Expanded(
             flex: 2,
             child: Container(
+              clipBehavior: Clip.none,
               decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.only(
@@ -257,51 +259,50 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                   bottomLeft: Radius.circular(8),
                 ),
               ),
-              child: Padding(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(16),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    // Calculate columns based on available width
-                    // We want items to be at least 180px wide for desktop
-                    final double itemWidth = 180;
-                    final int columns =
-                        (constraints.maxWidth / itemWidth).floor();
-                    // Ensure we have at least 1 column, maximum 4 columns
-                    final int crossAxisCount = columns.clamp(1, 5);
+                clipBehavior: Clip.none,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  // Calculate columns based on available width
+                  // We want items to be at least 180px wide for desktop
+                  final double itemWidth = 180;
+                  final int columns =
+                      (constraints.maxWidth / itemWidth).floor();
+                  // Ensure we have at least 1 column, maximum 4 columns
+                  final int crossAxisCount = columns.clamp(1, 5);
 
-                    return StaggeredGrid.count(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      children: List.generate(
-                        _showcaseItems.length,
-                        (index) => InkWell(
-                          borderRadius: BorderRadius.circular(16),
-                          onTap: () {
-                            setState(() {
-                              _selectedIndex = index;
-                              _previousItem = null;
-                              _userSelected =
-                                  true; // User has manually selected an app
-                            });
-                          },
-                          child: AppShowcaseItem(
-                            showcaseItem: _showcaseItems[index],
-                            isSelected: _selectedIndex == index,
-                          ),
-                        )
-                            .animate()
-                            .fade(duration: 600.ms, delay: (200 * index).ms)
-                            .scale(
-                                begin: const Offset(0.9, 0.9),
-                                end: const Offset(1.0, 1.0),
-                                duration: 600.ms,
-                                delay: (200 * index).ms),
-                      ),
-                    );
-                  }),
-                ),
+                  return StaggeredGrid.count(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    children: List.generate(
+                      _showcaseItems.length,
+                      (index) => InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          setState(() {
+                            _selectedIndex = index;
+                            _previousItem = null;
+                            _userSelected =
+                                true; // User has manually selected an app
+                          });
+                        },
+                        child: AppShowcaseItem(
+                          showcaseItem: _showcaseItems[index],
+                          isSelected: _selectedIndex == index,
+                        ),
+                      )
+                          .animate()
+                          .fade(duration: 600.ms, delay: (200 * index).ms)
+                          .scale(
+                              begin: const Offset(0.9, 0.9),
+                              end: const Offset(1.0, 1.0),
+                              duration: 600.ms,
+                              delay: (200 * index).ms),
+                    ),
+                  );
+                }),
               ),
             ),
           ),
