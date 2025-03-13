@@ -20,22 +20,20 @@ class AppShowcaseItem extends StatelessWidget {
       height: 160,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        /*boxShadow: [
           BoxShadow(
             color: showcaseItem.color.withOpacity(isSelected ? 0.35 : 0.1),
             blurRadius: isSelected ? 16 : 10,
             spreadRadius: isSelected ? 2 : 0,
-            offset: isSelected 
-              ? const Offset(0, 7)
-              : const Offset(0, 5),
+            offset: isSelected ? const Offset(0, 7) : const Offset(0, 5),
           ),
-        ],
+        ],*/
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
             showcaseItem.color,
-            showcaseItem.color.withOpacity(isSelected ? 0.9 : 0.8),
+            showcaseItem.color,
           ],
         ),
       ),
@@ -46,65 +44,60 @@ class AppShowcaseItem extends StatelessWidget {
           Positioned.fill(
             child: _buildBackgroundPattern(),
           ),
-          
+
           // Content
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // App icon
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    showcaseItem.icon,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                )
-                .animate(target: isSelected ? 1 : 0)
-                .scale(begin: const Offset(1.0, 1.0), end: const Offset(1.05, 1.05)),
-                
-                const SizedBox(width: 20),
-                
-                // Text content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        showcaseItem.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // App icon
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      showcaseItem.icon,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ).animate(target: isSelected ? 1 : 0).scale(
+                      begin: const Offset(1.0, 1.0),
+                      end: const Offset(1.05, 1.05)),
+
+                  const SizedBox(width: 20),
+
+                  // Text content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          showcaseItem.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        showcaseItem.description,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 12,
-                        ),
-                      ),
-                      const Spacer(),
-                      _buildFeatureRow(),
-                    ],
+                        const SizedBox(height: 6),
+                        _buildFeatureRow(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          
+
           // Animated overlay for hover effect
           AnimatedOpacity(
             opacity: isSelected ? 1.0 : 0.0,
@@ -134,8 +127,9 @@ class AppShowcaseItem extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                ).animate(target: isSelected ? 1 : 0)
-                  .shimmer(duration: 1200.ms, delay: 300.ms),
+                )
+                    .animate(target: isSelected ? 1 : 0)
+                    .shimmer(duration: 1200.ms, delay: 300.ms),
               ],
             ),
           ),
@@ -151,6 +145,7 @@ class AppShowcaseItem extends StatelessWidget {
   }
 
   Widget _buildFeatureRow() {
+    return Container();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -224,7 +219,7 @@ class PatternPainter extends CustomPainter {
 
     // Add a stylized app screen in the background
     final screenWidth = size.width * 0.3;
-    final screenHeight = screenWidth * 2;
+    final screenHeight = screenWidth * 0.75;
     final screenX = size.width - screenWidth * 0.7;
     final screenY = size.height - screenHeight * 0.7;
 

@@ -43,44 +43,44 @@ class _ShowcaseAppState extends State<ShowcaseApp>
     _showcaseItems = [
       // Fitness is now the first item
       ShowcaseItem(
-        title: 'Fitness Tracker',
+        title: 'Fitness',
         description: 'Interaktive Diagramme und Statistiken',
-        color: Colors.green.shade600,
+        color: Colors.green.shade900,
         icon: Icons.fitness_center_rounded,
         type: AppType.fitness,
       ),
       ShowcaseItem(
-        title: 'E-Commerce App',
+        title: 'E-Commerce',
         description: 'Schöne UI mit flüssigen Animationen',
-        color: Colors.blue.shade700,
+        color: Colors.blue.shade900,
         icon: Icons.shopping_bag_rounded,
         type: AppType.ecommerce,
       ),
       ShowcaseItem(
-        title: 'Banking App',
+        title: 'Banking',
         description: 'Sicheres und responsives Design',
-        color: Colors.purple.shade700,
+        color: Colors.purple.shade900,
         icon: Icons.account_balance_rounded,
         type: AppType.banking,
       ),
       ShowcaseItem(
         title: 'Essenslieferung',
         description: 'Ansprechende Animationen und einfache Navigation',
-        color: Colors.orange.shade700,
+        color: Colors.orange.shade900,
         icon: Icons.delivery_dining_rounded,
         type: AppType.foodDelivery,
       ),
       ShowcaseItem(
-        title: 'Reise App',
+        title: 'Reisen',
         description: 'Immersives Erlebnis mit 3D-Effekten',
-        color: Colors.teal.shade700,
+        color: Colors.teal.shade900,
         icon: Icons.travel_explore_rounded,
         type: AppType.travel,
       ),
       ShowcaseItem(
-        title: 'Musik App',
+        title: 'Musik',
         description: 'Immersiver Player mit Audiovisualisierung',
-        color: Colors.pink.shade700,
+        color: Colors.pink.shade900,
         icon: Icons.music_note_rounded,
         type: AppType.music,
       ),
@@ -111,32 +111,48 @@ class _ShowcaseAppState extends State<ShowcaseApp>
     double mobileItemWidth = 220 + 16; // Item width + right padding
     double desktopItemWidth = 280 + 16; // Item width + right padding
 
-    // Calculate exact scroll positions for both layouts
-    double mobileScrollOffset = _selectedIndex * mobileItemWidth;
-    double desktopScrollOffset = _selectedIndex * desktopItemWidth;
-
-    // Apply bounds to prevent overshooting
+    // Calculate exact scroll positions for both layouts with centering logic
     if (_mobileScrollController.hasClients) {
+      final double viewportWidth =
+          _mobileScrollController.position.viewportDimension;
       final double maxScroll = _mobileScrollController.position.maxScrollExtent;
+
+      // Calculate position that centers the item in the viewport
+      double mobileScrollOffset = (_selectedIndex * mobileItemWidth) -
+          (viewportWidth / 2) +
+          (mobileItemWidth / 2);
+
+      // Apply bounds to prevent overshooting
       mobileScrollOffset = mobileScrollOffset.clamp(0.0, maxScroll);
 
       _mobileScrollController.animateTo(
         mobileScrollOffset,
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeOutCubic,
+        duration: const Duration(
+            milliseconds: 600), // Faster animation for smoother feel
+        curve: Curves.easeOutQuint, // Smoother curve
       );
     }
 
     // Apply bounds to prevent overshooting
     if (_desktopScrollController.hasClients) {
+      final double viewportWidth =
+          _desktopScrollController.position.viewportDimension;
       final double maxScroll =
           _desktopScrollController.position.maxScrollExtent;
+
+      // Calculate position that centers the item in the viewport
+      double desktopScrollOffset = (_selectedIndex * desktopItemWidth) -
+          (viewportWidth / 2) +
+          (desktopItemWidth / 2);
+
+      // Apply bounds to prevent overshooting
       desktopScrollOffset = desktopScrollOffset.clamp(0.0, maxScroll);
 
       _desktopScrollController.animateTo(
         desktopScrollOffset,
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeOutCubic,
+        duration: const Duration(
+            milliseconds: 600), // Faster animation for smoother feel
+        curve: Curves.easeOutQuint, // Smoother curve
       );
     }
   }
@@ -197,7 +213,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
             Colors.white.withOpacity(1.0),
             Colors.white.withOpacity(0.0), // Right edge still has fade
           ],
-          stops: const [0.0, 0.85, 1.0], // Adjusted stops for right-only fade
+          stops: const [0.0, 0.9, 1.0], // Adjusted stops for right-only fade
         ).createShader(bounds);
       },
       blendMode: BlendMode.dstIn,
@@ -215,7 +231,10 @@ class _ShowcaseAppState extends State<ShowcaseApp>
           height: 150, // Fixed height for the row
           child: _buildEdgeGradientMask(
             child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+                decelerationRate: ScrollDecelerationRate.fast,
+              ),
               controller: _mobileScrollController,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               scrollDirection: Axis.horizontal,
@@ -234,7 +253,10 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                           _userSelected =
                               true; // User has manually selected an app
 
-                          // No need to scroll here as the tapped item is already visible
+                          // Scroll to center the selected item
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scrollToSelectedItem();
+                          });
                         });
                       },
                       child: AppShowcaseItem(
@@ -307,10 +329,13 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                 ),
               ),
               child: SizedBox(
-                height: 180, // Fixed height for the row
+                height: 150, // Fixed height for the row
                 child: _buildEdgeGradientMask(
                   child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                      decelerationRate: ScrollDecelerationRate.fast,
+                    ),
                     controller: _desktopScrollController,
                     scrollDirection: Axis.horizontal,
                     itemCount: _showcaseItems.length,
@@ -329,7 +354,11 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                                 _userSelected =
                                     true; // User has manually selected an app
 
-                                // No need to scroll here as the tapped item is already visible
+                                // Scroll to center the selected item
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _scrollToSelectedItem();
+                                });
                               });
                             },
                             child: AppShowcaseItem(
