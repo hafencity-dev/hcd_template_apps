@@ -24,6 +24,10 @@ class _ShowcaseAppState extends State<ShowcaseApp>
   ShowcaseItem? _previousItem;
   bool _isClosing = false; // Track when we're in the closing phase
 
+  // Mouse tracking properties
+  Offset _mousePosition = Offset.zero;
+  bool _isMouseInside = false;
+
   // Auto switching properties
   Timer? _autoSwitchTimer;
   bool _userSelected = false; // Track if user has manually selected an app
@@ -119,33 +123,55 @@ class _ShowcaseAppState extends State<ShowcaseApp>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Interactive animated background
-          InteractiveBackground(controller: _controller),
-
-          // Main content
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Showcase content
-                Expanded(
-                  child: ResponsiveValue<Widget>(
-                    context,
-                    defaultValue: _buildMobileLayout(),
-                    conditionalValues: [
-                      Condition.largerThan(
-                        name: MOBILE,
-                        value: _buildDesktopLayout(),
-                      )
-                    ],
-                  ).value,
-                ),
-              ],
+      body: MouseRegion(
+        onEnter: (event) {
+          setState(() {
+            _isMouseInside = true;
+            _mousePosition = event.position;
+          });
+        },
+        onHover: (event) {
+          setState(() {
+            _mousePosition = event.position;
+          });
+        },
+        onExit: (event) {
+          setState(() {
+            _isMouseInside = false;
+          });
+        },
+        child: Stack(
+          children: [
+            // Interactive animated background
+            InteractiveBackground(
+              controller: _controller,
+              externalMousePosition: _mousePosition,
+              externalMouseInside: _isMouseInside,
             ),
-          ),
-        ],
+
+            // Main content
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Showcase content
+                  Expanded(
+                    child: ResponsiveValue<Widget>(
+                      context,
+                      defaultValue: _buildMobileLayout(),
+                      conditionalValues: [
+                        Condition.largerThan(
+                          name: MOBILE,
+                          value: _buildDesktopLayout(),
+                        )
+                      ],
+                    ).value,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -176,46 +202,61 @@ class _ShowcaseAppState extends State<ShowcaseApp>
     // App items in a grid (larger part) and app screen on bottom
     return Column(
       children: [
-        // App items section - now a 2-row grid
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            child: StaggeredGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              children: List.generate(
-                _showcaseItems.length,
-                (index) => InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = index;
-                      _previousItem = null;
-                      _userSelected = true; // User has manually selected an app
-                    });
-                  },
-                  child: AppShowcaseItem(
-                    showcaseItem: _showcaseItems[index],
-                    isSelected: _selectedIndex == index,
+        // App items section - now a responsive grid with vertical scrolling
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: LayoutBuilder(builder: (context, constraints) {
+                // Calculate columns based on available width
+                // We want items to be at least 150px wide
+                final double itemWidth = 150;
+                final int columns = (constraints.maxWidth / itemWidth).floor();
+                // Ensure we have at least 1 column
+                final int crossAxisCount = columns < 1 ? 1 : columns;
+
+                return StaggeredGrid.count(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  children: List.generate(
+                    _showcaseItems.length,
+                    (index) => InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index;
+                          _previousItem = null;
+                          _userSelected =
+                              true; // User has manually selected an app
+                        });
+                      },
+                      child: AppShowcaseItem(
+                        showcaseItem: _showcaseItems[index],
+                        isSelected: _selectedIndex == index,
+                      ),
+                    )
+                        .animate()
+                        .fade(duration: 600.ms, delay: (200 * index).ms)
+                        .move(
+                          begin: const Offset(0.2, 0),
+                          end: Offset.zero,
+                          duration: 600.ms,
+                          delay: (200 * index).ms,
+                          curve: Curves.easeOutQuad,
+                        ),
                   ),
-                )
-                    .animate()
-                    .fade(duration: 600.ms, delay: (200 * index).ms)
-                    .move(
-                      begin: const Offset(0.2, 0),
-                      end: Offset.zero,
-                      duration: 600.ms,
-                      delay: (200 * index).ms,
-                      curve: Curves.easeOutQuad,
-                    ),
-              ),
+                );
+              }),
             ),
           ),
         ),
 
         // App preview section (rest of the screen)
         Expanded(
+          flex: 3,
           child: Center(
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 500),
@@ -251,12 +292,12 @@ class _ShowcaseAppState extends State<ShowcaseApp>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // App items section - now a 2-row grid
+          // App items section - now a responsive grid with vertical scrolling
           Expanded(
             flex: 2,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
                   bottomLeft: Radius.circular(8),
@@ -264,36 +305,48 @@ class _ShowcaseAppState extends State<ShowcaseApp>
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  child: StaggeredGrid.count(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    children: List.generate(
-                      _showcaseItems.length,
-                      (index) => InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = index;
-                            _previousItem = null;
-                            _userSelected =
-                                true; // User has manually selected an app
-                          });
-                        },
-                        child: AppShowcaseItem(
-                          showcaseItem: _showcaseItems[index],
-                          isSelected: _selectedIndex == index,
-                        ),
-                      )
-                          .animate()
-                          .fade(duration: 600.ms, delay: (200 * index).ms)
-                          .scale(
-                              begin: const Offset(0.9, 0.9),
-                              end: const Offset(1.0, 1.0),
-                              duration: 600.ms,
-                              delay: (200 * index).ms),
-                    ),
-                  ),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    // Calculate columns based on available width
+                    // We want items to be at least 180px wide for desktop
+                    final double itemWidth = 180;
+                    final int columns =
+                        (constraints.maxWidth / itemWidth).floor();
+                    // Ensure we have at least 1 column, maximum 4 columns
+                    final int crossAxisCount = columns.clamp(1, 5);
+
+                    return StaggeredGrid.count(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      children: List.generate(
+                        _showcaseItems.length,
+                        (index) => InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = index;
+                              _previousItem = null;
+                              _userSelected =
+                                  true; // User has manually selected an app
+                            });
+                          },
+                          child: AppShowcaseItem(
+                            showcaseItem: _showcaseItems[index],
+                            isSelected: _selectedIndex == index,
+                          ),
+                        )
+                            .animate()
+                            .fade(duration: 600.ms, delay: (200 * index).ms)
+                            .scale(
+                                begin: const Offset(0.9, 0.9),
+                                end: const Offset(1.0, 1.0),
+                                duration: 600.ms,
+                                delay: (200 * index).ms),
+                      ),
+                    );
+                  }),
                 ),
               ),
             ),
@@ -309,7 +362,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                   bottomRight: Radius.circular(8),
                   bottomLeft: Radius.circular(8),
                 ),
-                color: Colors.white,
+                color: Colors.transparent,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
