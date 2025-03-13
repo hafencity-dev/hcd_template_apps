@@ -83,33 +83,53 @@ class BankingChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // N26-style chart is more minimalistic with less pronounced gradients
     final paint = Paint()
-      ..color = color.withOpacity(0.5)
+      ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..strokeCap = StrokeCap.round;
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
 
+    // Subtle gradient fill, more like N26
     final fillPaint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          color.withOpacity(0.3),
-          color.withOpacity(0.0),
+          color.withOpacity(0.15),
+          color.withOpacity(0.03),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.fill;
 
+    // Draw grid lines
+    final gridPaint = Paint()
+      ..color = Colors.grey.withOpacity(0.1)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    // Draw horizontal grid lines
+    for (int i = 1; i < 4; i++) {
+      final y = size.height * (i / 4);
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        gridPaint,
+      );
+    }
+
     final path = Path();
     final fillPath = Path();
 
-    // Generate some random-looking but smooth chart data
+    // Generate smoother chart data - more N26-like
     final points = <Offset>[];
-    final pointCount = 7;
+    final pointCount = 7; // One point for each month
     final segmentWidth = size.width / (pointCount - 1);
 
-    // Predefined Y values for a nice looking chart
-    final yValues = [0.7, 0.5, 0.8, 0.6, 0.9, 0.7, 0.8];
+    // N26 charts typically show upward trend with some variation
+    // these values represent a growing balance over time
+    final yValues = [0.72, 0.65, 0.68, 0.75, 0.78, 0.86, 0.92];
 
     for (int i = 0; i < pointCount; i++) {
       final x = i * segmentWidth;
@@ -120,7 +140,7 @@ class BankingChartPainter extends CustomPainter {
         path.moveTo(x, y);
         fillPath.moveTo(x, y);
       } else {
-        // Create a smooth curve
+        // Create a smooth curve using cubic Bezier
         if (i > 0 && i < pointCount - 1) {
           final prevPoint = points[i - 1];
           final cp1 = Offset(prevPoint.dx + segmentWidth * 0.5, prevPoint.dy);
@@ -142,16 +162,30 @@ class BankingChartPainter extends CustomPainter {
     // Draw the fill
     canvas.drawPath(fillPath, fillPaint);
 
-    // Draw the line
+    // Draw the line - N26 uses crisp lines
     canvas.drawPath(path, paint);
 
-    // Draw small circles on the data points
-    final circlePaint = Paint()
+    // Draw data points - N26 style with subtle indicators
+    final highlightPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    final pointPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
 
-    for (final point in points) {
-      canvas.drawCircle(point, 3.0, circlePaint);
+    // Only highlight current point (last one)
+    for (int i = 0; i < points.length; i++) {
+      final point = points[i];
+      if (i == points.length - 1) {
+        // Main highlighted point (current value)
+        canvas.drawCircle(point, 6.0, paint);
+        canvas.drawCircle(point, 4.0, highlightPaint);
+        canvas.drawCircle(point, 2.5, pointPaint);
+      } else {
+        // Small dot for other data points
+        canvas.drawCircle(point, 2.0, pointPaint);
+      }
     }
   }
 

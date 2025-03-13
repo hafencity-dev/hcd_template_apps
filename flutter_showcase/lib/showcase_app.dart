@@ -62,8 +62,8 @@ class _ShowcaseAppState extends State<ShowcaseApp>
       ),
       ShowcaseItem(
         title: 'Banking',
-        description: 'Sicheres und responsives Design',
-        color: const Color(0xFF275C42), // Deep green from palette
+        description: 'Modern UI with realistic card animations',
+        color: const Color(0xFF48BB78), // N26-inspired teal color
         icon: Icons.account_balance_rounded,
         type: AppType.banking,
       ),

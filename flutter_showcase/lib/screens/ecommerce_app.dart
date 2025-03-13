@@ -25,6 +25,12 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
   final PageController _bannerController = PageController();
   final ScrollController _scrollController = ScrollController();
 
+  // Add state for search functionality
+  final FocusNode _searchFocusNode = FocusNode();
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearchFocused = false;
+  String _searchQuery = '';
+
   final List<Map<String, dynamic>> _categories = [
     {'name': 'All', 'icon': Icons.grid_view_rounded},
     {'name': 'Clothing', 'icon': Icons.checkroom_rounded},
@@ -74,6 +80,13 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
         _scrollToNextBanner();
       }
     });
+
+    // Listen to focus changes for search field
+    _searchFocusNode.addListener(() {
+      setState(() {
+        _isSearchFocused = _searchFocusNode.hasFocus;
+      });
+    });
   }
 
   void _scrollToNextBanner() {
@@ -93,6 +106,8 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
   void dispose() {
     _animationController.dispose();
     _bannerController.dispose();
+    _searchFocusNode.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -151,73 +166,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
 
               // Header
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          _selectedCategoryIndex == 0
-                              ? 'Popular Products'
-                              : '${_categories[_selectedCategoryIndex]['name']} Products',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      _GlassmorphicContainer(
-                        width: 84,
-                        height: 28,
-                        borderRadius: 14,
-                        blur: 4,
-                        linearGradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            widget.showcaseItem.color.withOpacity(0.15),
-                            widget.showcaseItem.color.withOpacity(0.05),
-                          ],
-                        ),
-                        borderGradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            widget.showcaseItem.color.withOpacity(0.2),
-                            widget.showcaseItem.color.withOpacity(0.1),
-                          ],
-                        ),
-                        child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'View All',
-                                style: TextStyle(
-                                  color: widget.showcaseItem.color,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(width: 3),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 10,
-                                color: widget.showcaseItem.color,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                          .animate()
-                          .fadeIn(delay: 500.ms)
-                          .slideX(begin: 0.2, end: 0),
-                    ],
-                  ),
-                ),
+                child: _buildCategoryHeader(),
               ),
 
               // Products grid
@@ -232,14 +181,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _cartItemCount++;
-                          });
-                        },
-                        child: _buildProductItem(index),
-                      );
+                      return _buildProductItem(index);
                     },
                     childCount: 4,
                   ),
@@ -457,61 +399,356 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
   }
 
   Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: _GlassmorphicContainer(
-        width: double.infinity,
-        height: 45, // Reduced search bar height
-        borderRadius: 16,
-        blur: 4,
-        linearGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.7),
-            Colors.white.withOpacity(0.4),
-          ],
-        ),
-        borderGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.8),
-            Colors.white.withOpacity(0.2),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Icon(Icons.search_rounded, color: Colors.grey.shade500, size: 20),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Search products...',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
-                  overflow: TextOverflow.ellipsis,
+    // Fake search suggestions
+    final searchSuggestions = [
+      {'text': 'Trending: Summer collection', 'icon': Icons.trending_up},
+      {'text': 'Smart watches under \$100', 'icon': Icons.watch_outlined},
+      {'text': 'Best rated headphones', 'icon': Icons.headphones_outlined},
+      {'text': 'Discounted items', 'icon': Icons.discount_outlined},
+    ];
+
+    return Stack(
+      children: [
+        // Search bar
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+          child: GestureDetector(
+            onTap: () {
+              // Manually handle the focus to prevent event issues
+              FocusScope.of(context).requestFocus(_searchFocusNode);
+            },
+            child: _GlassmorphicContainer(
+              width: double.infinity,
+              height: 45,
+              borderRadius: 12,
+              blur: 4,
+              linearGradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.7),
+                  Colors.white.withOpacity(0.4),
+                ],
+              ),
+              borderGradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.8),
+                  Colors.white.withOpacity(0.2),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Icon(Icons.search_rounded,
+                        color: Colors.grey.shade500, size: 20),
+                    const SizedBox(width: 12),
+                    // Replace Text with TextField
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _searchFocusNode,
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search products...',
+                          hintStyle: TextStyle(
+                              color: Colors.grey.shade500, fontSize: 13),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          isDense: true,
+                        ),
+                        style: TextStyle(
+                            color: Colors.grey.shade800,
+                            fontSize: 13,
+                            letterSpacing: -0.3),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Filter button
+                    InkWell(
+                      onTap: () {
+                        // Simply unfocus to avoid focus issues with overlays
+                        _searchFocusNode.unfocus();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: widget.showcaseItem.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(Icons.tune_rounded,
+                            color: widget.showcaseItem.color, size: 18),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: widget.showcaseItem.color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+            ),
+          ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(
+              begin: -0.2,
+              end: 0,
+              duration: 400.ms,
+              delay: 200.ms,
+              curve: Curves.easeOutQuad),
+        ),
+
+        // Search suggestions/results (only visible when search is focused)
+        if (_isSearchFocused)
+          Padding(
+            padding: const EdgeInsets.only(top: 75),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: AnimatedCrossFade(
+                firstChild: _buildSearchSuggestions(searchSuggestions),
+                secondChild: _buildSearchResults(),
+                crossFadeState: _searchQuery.isEmpty
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+                duration: const Duration(milliseconds: 200),
+                layoutBuilder:
+                    (topChild, topChildKey, bottomChild, bottomChildKey) {
+                  return Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      PositionedDirectional(
+                        key: bottomChildKey,
+                        child: bottomChild,
+                      ),
+                      PositionedDirectional(
+                        key: topChildKey,
+                        child: topChild,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )
+                .animate()
+                .fadeIn(duration: 200.ms)
+                .slideY(begin: -0.1, end: 0, duration: 200.ms),
+          ),
+      ],
+    );
+  }
+
+  // Widget for search suggestions
+  Widget _buildSearchSuggestions(List<Map<String, dynamic>> searchSuggestions) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Suggestion title
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Text(
+            'Suggestions',
+            style: TextStyle(
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              letterSpacing: -0.3,
+            ),
+          ),
+        ),
+
+        // Suggestions list
+        ...searchSuggestions.map((suggestion) => InkWell(
+              onTap: () {
+                setState(() {
+                  _searchController.text = suggestion['text'] as String;
+                  _searchQuery = suggestion['text'] as String;
+                });
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      suggestion['icon'] as IconData,
+                      size: 16,
+                      color: Colors.grey.shade500,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        suggestion['text'] as String,
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 13,
+                          letterSpacing: -0.3,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Icon(
+                      Icons.north_west_rounded,
+                      size: 14,
+                      color: Colors.grey.shade400,
+                    ),
+                  ],
                 ),
-                child: Icon(Icons.tune_rounded,
-                    color: widget.showcaseItem.color, size: 18),
+              ),
+            )),
+
+        // Bottom padding
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+
+  // Widget for search results
+  Widget _buildSearchResults() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Results header
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            children: [
+              Text(
+                'Results for ',
+                style: TextStyle(
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  letterSpacing: -0.3,
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  '"$_searchQuery"',
+                  style: TextStyle(
+                    color: widget.showcaseItem.color,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    letterSpacing: -0.3,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
         ),
-      ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(
-          begin: -0.2,
-          end: 0,
-          duration: 400.ms,
-          delay: 200.ms,
-          curve: Curves.easeOutQuad),
+
+        // Fake search results
+        ...List.generate(
+            3,
+            (index) => InkWell(
+                  onTap: () {
+                    // Just unfocus, in a real app this would navigate to product
+                    _searchFocusNode.unfocus();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: widget.showcaseItem.color.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              index == 0
+                                  ? Icons.checkroom_outlined
+                                  : index == 1
+                                      ? Icons.headphones
+                                      : Icons.watch_outlined,
+                              size: 18,
+                              color: widget.showcaseItem.color,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                index == 0
+                                    ? 'Premium $_searchQuery T-Shirt'
+                                    : index == 1
+                                        ? 'Wireless $_searchQuery Headphones'
+                                        : '$_searchQuery Smart Watch',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                  letterSpacing: -0.3,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                index == 0
+                                    ? '\$24.99'
+                                    : index == 1
+                                        ? '\$79.99'
+                                        : '\$89.99',
+                                style: TextStyle(
+                                  color: widget.showcaseItem.color,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+
+        // View all results button
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            width: double.infinity,
+            height: 40,
+            decoration: BoxDecoration(
+              color: widget.showcaseItem.color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                'View all results',
+                style: TextStyle(
+                  color: widget.showcaseItem.color,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  letterSpacing: -0.3,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -720,13 +957,17 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
             final isSelected = _selectedCategoryIndex == index;
             return GestureDetector(
               onTap: () {
-                setState(() {
-                  _selectedCategoryIndex = index;
-                });
+                if (_selectedCategoryIndex != index) {
+                  setState(() {
+                    _selectedCategoryIndex = index;
+                  });
+                }
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 6),
-                child: Container(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 450),
+                  curve: Curves.easeOutCubic,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                   decoration: BoxDecoration(
@@ -755,14 +996,28 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        _categories[index]['icon'],
-                        color: isSelected ? Colors.white : Colors.grey.shade700,
-                        size: 16,
+                      // Icon with animated color transition
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 350),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child: Icon(
+                          _categories[index]['icon'],
+                          key: ValueKey<String>(
+                              "icon_$index${isSelected ? "_selected" : ""}"),
+                          color:
+                              isSelected ? Colors.white : Colors.grey.shade700,
+                          size: 16,
+                        ),
                       ),
                       const SizedBox(width: 6),
-                      Text(
-                        _categories[index]['name'],
+                      // Text with animated color transition
+                      AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 350),
                         style: TextStyle(
                           color:
                               isSelected ? Colors.white : Colors.grey.shade800,
@@ -770,6 +1025,9 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                               isSelected ? FontWeight.w500 : FontWeight.normal,
                           fontSize: 13,
                           letterSpacing: -0.3,
+                        ),
+                        child: Text(
+                          _categories[index]['name'],
                         ),
                       ),
                     ],
@@ -794,6 +1052,90 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
     );
   }
 
+  // Header section with category title
+  Widget _buildCategoryHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 350),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.05, 0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: Text(
+                _selectedCategoryIndex == 0
+                    ? 'Popular Products'
+                    : '${_categories[_selectedCategoryIndex]['name']} Products',
+                key: ValueKey<int>(_selectedCategoryIndex),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  letterSpacing: -0.3,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          _GlassmorphicContainer(
+            width: 84,
+            height: 28,
+            borderRadius: 14,
+            blur: 4,
+            linearGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                widget.showcaseItem.color.withOpacity(0.15),
+                widget.showcaseItem.color.withOpacity(0.05),
+              ],
+            ),
+            borderGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                widget.showcaseItem.color.withOpacity(0.2),
+                widget.showcaseItem.color.withOpacity(0.1),
+              ],
+            ),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'View All',
+                    style: TextStyle(
+                      color: widget.showcaseItem.color,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 3),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 10,
+                    color: widget.showcaseItem.color,
+                  ),
+                ],
+              ),
+            ),
+          ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.2, end: 0),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProductItem(int index) {
     final productColors = [
       Colors.blue.shade700,
@@ -808,28 +1150,32 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
         'icon': Icons.checkroom,
         'price': '\$24.99',
         'discount': '20%',
-        'rating': 4.7
+        'rating': 4.7,
+        'category': 1, // Clothing
       },
       {
         'name': 'Smart Watch',
         'icon': Icons.watch,
         'price': '\$89.99',
         'discount': '',
-        'rating': 4.9
+        'rating': 4.9,
+        'category': 3, // Accessories
       },
       {
         'name': 'Travel Backpack',
         'icon': Icons.backpack,
         'price': '\$49.99',
         'discount': '10%',
-        'rating': 4.6
+        'rating': 4.6,
+        'category': 1, // Clothing
       },
       {
         'name': 'Wireless Headphones',
         'icon': Icons.headphones,
         'price': '\$79.99',
         'discount': '',
-        'rating': 4.8
+        'rating': 4.8,
+        'category': 2, // Electronics
       },
     ];
 
@@ -838,221 +1184,281 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
     final hasDiscount = product['discount'] != null &&
         product['discount'].toString().isNotEmpty;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.03),
-            blurRadius: 3,
-            spreadRadius: 0,
-            offset: const Offset(0, 1),
+    // Check if product matches selected category or if "All" is selected
+    final bool matchesCategory = _selectedCategoryIndex == 0 ||
+        (product['category'] as int) == _selectedCategoryIndex;
+
+    // Highlight effect for products when category changes
+    final bool shouldHighlight = matchesCategory && _selectedCategoryIndex > 0;
+
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 450),
+      opacity: matchesCategory ? 1.0 : 0.4,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: EdgeInsets.all(
+            matchesCategory ? 0.0 : 5.0), // Simple animation effect
+        margin: EdgeInsets.all(
+            matchesCategory ? 0.0 : 5.0), // Simple animation effect
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.03),
+              blurRadius: 3,
+              spreadRadius: 0,
+              offset: const Offset(0, 1),
+            ),
+          ],
+          border: Border.all(
+            color: shouldHighlight
+                ? widget.showcaseItem.color.withOpacity(0.3)
+                : Colors.grey.shade50,
+            width: shouldHighlight ? 2 : 1,
           ),
-        ],
-        border: Border.all(
-          color: Colors.grey.shade50,
-          width: 1,
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Product image section
-          AspectRatio(
-            aspectRatio: 1.35, // Fixed aspect ratio instead of fixed height
-            child: Stack(
-              children: [
-                // Background color
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.06),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product image section
+            AspectRatio(
+              aspectRatio: 1.375, // Fixed aspect ratio instead of fixed height
+              child: Stack(
+                children: [
+                  // Background color with animated transition
+                  Positioned.fill(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      decoration: BoxDecoration(
+                        color: shouldHighlight
+                            ? widget.showcaseItem.color.withOpacity(0.1)
+                            : color.withOpacity(0.06),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Product discount badge
-                if (hasDiscount)
+                  // Product discount badge
+                  if (hasDiscount)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade400,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: Text(
+                          '-${product['discount']}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 9,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  // Wishlist button
                   Positioned(
                     top: 8,
-                    right: 8,
+                    left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Colors.red.shade400,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(3),
                       ),
-                      child: Text(
-                        '-${product['discount']}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 9,
-                        ),
+                      child: Icon(
+                        Icons.favorite_border_rounded,
+                        size: 12,
+                        color: shouldHighlight
+                            ? widget.showcaseItem.color.withOpacity(0.8)
+                            : color.withOpacity(0.8),
                       ),
                     ),
                   ),
 
-                // Wishlist button
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
+                  // Product icon with animation
+                  Center(
                     child: Icon(
-                      Icons.favorite_border_rounded,
-                      size: 12,
-                      color: color.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-
-                // Product icon
-                Center(
-                  child: Icon(
-                    product['icon'] as IconData,
-                    size: 40,
-                    color: color.withOpacity(0.85),
-                  )
-                      .animate(
-                        onPlay: (controller) =>
-                            controller.repeat(reverse: true),
-                      )
-                      .scale(
-                        begin: const Offset(1, 1),
-                        end: const Offset(1.03, 1.03),
-                        duration: 2500.ms,
-                        delay: (200 * index).ms,
-                      ),
-                ),
-              ],
-            ),
-          ),
-
-          // Product info section
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Product name
-                  Text(
-                    product['name'] as String,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
-                      letterSpacing: -0.3,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                      product['icon'] as IconData,
+                      size: 40,
+                      color: shouldHighlight
+                          ? widget.showcaseItem.color.withOpacity(0.85)
+                          : color.withOpacity(0.85),
+                    )
+                        .animate(
+                          onPlay: (controller) =>
+                              controller.repeat(reverse: true),
+                        )
+                        .scale(
+                          begin: const Offset(1, 1),
+                          end: const Offset(1.03, 1.03),
+                          duration: 2500.ms,
+                          delay: (200 * index).ms,
+                        ),
                   ),
 
-                  const Spacer(flex: 1),
-
-                  // Price row
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Price with discount
-                      Expanded(
-                        child: hasDiscount
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    product['price'] as String,
-                                    style: TextStyle(
-                                      color: widget.showcaseItem.color,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      letterSpacing: -0.3,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    '\$${(double.parse((product['price'] as String).substring(1)) * 1.25).toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade400,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 10,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                product['price'] as String,
-                                style: TextStyle(
-                                  color: widget.showcaseItem.color,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  letterSpacing: -0.3,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                      ),
-
-                      // Add to cart button
-                      Container(
+                  // Category match indicator (only shown when a specific category is selected)
+                  if (shouldHighlight)
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: widget.showcaseItem.color.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(4),
+                          color: widget.showcaseItem.color.withOpacity(0.85),
+                          shape: BoxShape.circle,
                         ),
-                        padding: const EdgeInsets.all(5),
                         child: const Icon(
-                          Icons.add_rounded,
+                          Icons.check,
+                          size: 10,
                           color: Colors.white,
-                          size: 16,
                         ),
                       ),
-                    ],
-                  ),
-
-                  const Spacer(flex: 1),
-
-                  // Rating stars
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        size: 10,
-                        color: Colors.amber.shade300,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '${product['rating']}',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
+                    ).animate().fadeIn(duration: 300.ms).scale(
+                          begin: const Offset(0.5, 0.5),
+                          end: const Offset(1.0, 1.0),
+                          duration: 400.ms,
+                          curve: Curves.elasticOut,
                         ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
-          ),
-        ],
+
+            // Product info section
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Product name
+                    Text(
+                      product['name'] as String,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        letterSpacing: -0.3,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const Spacer(flex: 1),
+
+                    // Price row
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Price with discount
+                        Expanded(
+                          child: hasDiscount
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      product['price'] as String,
+                                      style: TextStyle(
+                                        color: widget.showcaseItem.color,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        letterSpacing: -0.3,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      '\$${(double.parse((product['price'] as String).substring(1)) * 1.25).toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade400,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 10,
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  product['price'] as String,
+                                  style: TextStyle(
+                                    color: widget.showcaseItem.color,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                        ),
+
+                        // Add to cart button with animated color when category matches
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          decoration: BoxDecoration(
+                            color: shouldHighlight
+                                ? widget.showcaseItem.color
+                                : widget.showcaseItem.color.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          padding: const EdgeInsets.all(5),
+                          child: const Icon(
+                            Icons.add_rounded,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const Spacer(flex: 1),
+
+                    // Rating stars - only shown for matching categories
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 300),
+                      opacity: matchesCategory ? 1.0 : 0.0,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height: matchesCategory ? 14 : 0,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 10,
+                              color: Colors.amber.shade300,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              '${product['rating']}',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     ).animate().fadeIn(duration: 500.ms, delay: (200 * index).ms).slideY(
           begin: 0.2,
