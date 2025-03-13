@@ -50,7 +50,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
         type: AppType.fitness,
       ),
       ShowcaseItem(
-        title: 'E-Commerce',
+        title: 'Shop',
         description: 'Schöne UI mit flüssigen Animationen',
         color: Colors.blue.shade900,
         icon: Icons.shopping_bag_rounded,
@@ -97,64 +97,14 @@ class _ShowcaseAppState extends State<ShowcaseApp>
         setState(() {
           // Move to next app, loop back to start when we reach the end
           _selectedIndex = (_selectedIndex + 1) % _showcaseItems.length;
-
-          // Scroll to make the newly selected item visible
-          _scrollToSelectedItem();
         });
       }
     });
   }
 
-  // Method to scroll to the selected item
+  // Method to scroll to the selected item - no longer needed with grid layout
   void _scrollToSelectedItem() {
-    // Calculate precise position of the selected item based on actual item widths
-    double mobileItemWidth = 220 + 16; // Item width + right padding
-    double desktopItemWidth = 280 + 16; // Item width + right padding
-
-    // Calculate exact scroll positions for both layouts with centering logic
-    if (_mobileScrollController.hasClients) {
-      final double viewportWidth =
-          _mobileScrollController.position.viewportDimension;
-      final double maxScroll = _mobileScrollController.position.maxScrollExtent;
-
-      // Calculate position that centers the item in the viewport
-      double mobileScrollOffset = (_selectedIndex * mobileItemWidth) -
-          (viewportWidth / 2) +
-          (mobileItemWidth / 2);
-
-      // Apply bounds to prevent overshooting
-      mobileScrollOffset = mobileScrollOffset.clamp(0.0, maxScroll);
-
-      _mobileScrollController.animateTo(
-        mobileScrollOffset,
-        duration: const Duration(
-            milliseconds: 600), // Faster animation for smoother feel
-        curve: Curves.easeOutQuint, // Smoother curve
-      );
-    }
-
-    // Apply bounds to prevent overshooting
-    if (_desktopScrollController.hasClients) {
-      final double viewportWidth =
-          _desktopScrollController.position.viewportDimension;
-      final double maxScroll =
-          _desktopScrollController.position.maxScrollExtent;
-
-      // Calculate position that centers the item in the viewport
-      double desktopScrollOffset = (_selectedIndex * desktopItemWidth) -
-          (viewportWidth / 2) +
-          (desktopItemWidth / 2);
-
-      // Apply bounds to prevent overshooting
-      desktopScrollOffset = desktopScrollOffset.clamp(0.0, maxScroll);
-
-      _desktopScrollController.animateTo(
-        desktopScrollOffset,
-        duration: const Duration(
-            milliseconds: 600), // Faster animation for smoother feel
-        curve: Curves.easeOutQuint, // Smoother curve
-      );
-    }
+    // No longer needed with grid layout
   }
 
   @override
@@ -223,47 +173,31 @@ class _ShowcaseAppState extends State<ShowcaseApp>
 
   Widget _buildMobileLayout() {
     // For mobile, we stack the components vertically
-    // App items on top (larger part) and app screen on bottom
+    // App items in a grid (larger part) and app screen on bottom
     return Column(
       children: [
-        // App items section - now a single row with horizontal scroll
-        SizedBox(
-          height: 150, // Fixed height for the row
-          child: _buildEdgeGradientMask(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-                decelerationRate: ScrollDecelerationRate.fast,
-              ),
-              controller: _mobileScrollController,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              scrollDirection: Axis.horizontal,
-              itemCount: _showcaseItems.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: SizedBox(
-                    width: 220, // Fixed width for each card
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        setState(() {
-                          _selectedIndex = index;
-                          _previousItem = null;
-                          _userSelected =
-                              true; // User has manually selected an app
-
-                          // Scroll to center the selected item
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _scrollToSelectedItem();
-                          });
-                        });
-                      },
-                      child: AppShowcaseItem(
-                        showcaseItem: _showcaseItems[index],
-                        isSelected: _selectedIndex == index,
-                      ),
-                    ),
+        // App items section - now a 2-row grid
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            child: StaggeredGrid.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              children: List.generate(
+                _showcaseItems.length,
+                (index) => InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = index;
+                      _previousItem = null;
+                      _userSelected = true; // User has manually selected an app
+                    });
+                  },
+                  child: AppShowcaseItem(
+                    showcaseItem: _showcaseItems[index],
+                    isSelected: _selectedIndex == index,
                   ),
                 )
                     .animate()
@@ -274,8 +208,8 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                       duration: 600.ms,
                       delay: (200 * index).ms,
                       curve: Curves.easeOutQuad,
-                    );
-              },
+                    ),
+              ),
             ),
           ),
         ),
@@ -317,7 +251,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // App items section - now a single row with horizontal scroll
+          // App items section - now a 2-row grid
           Expanded(
             flex: 2,
             child: Container(
@@ -328,44 +262,27 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                   bottomLeft: Radius.circular(8),
                 ),
               ),
-              child: SizedBox(
-                height: 150, // Fixed height for the row
-                child: _buildEdgeGradientMask(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                      decelerationRate: ScrollDecelerationRate.fast,
-                    ),
-                    controller: _desktopScrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _showcaseItems.length,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: SizedBox(
-                          width: 280, // Fixed width for each card
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = index;
-                                _previousItem = null;
-                                _userSelected =
-                                    true; // User has manually selected an app
-
-                                // Scroll to center the selected item
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  _scrollToSelectedItem();
-                                });
-                              });
-                            },
-                            child: AppShowcaseItem(
-                              showcaseItem: _showcaseItems[index],
-                              isSelected: _selectedIndex == index,
-                            ),
-                          ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  child: StaggeredGrid.count(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    children: List.generate(
+                      _showcaseItems.length,
+                      (index) => InkWell(
+                        onTap: () {
+                          setState(() {
+                            _selectedIndex = index;
+                            _previousItem = null;
+                            _userSelected =
+                                true; // User has manually selected an app
+                          });
+                        },
+                        child: AppShowcaseItem(
+                          showcaseItem: _showcaseItems[index],
+                          isSelected: _selectedIndex == index,
                         ),
                       )
                           .animate()
@@ -374,8 +291,8 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                               begin: const Offset(0.9, 0.9),
                               end: const Offset(1.0, 1.0),
                               duration: 600.ms,
-                              delay: (200 * index).ms);
-                    },
+                              delay: (200 * index).ms),
+                    ),
                   ),
                 ),
               ),
@@ -435,9 +352,6 @@ class _ShowcaseAppState extends State<ShowcaseApp>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // When dependencies change (like screen size), ensure selected item is visible
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToSelectedItem();
-    });
+    // No longer need to scroll to selected item with grid layout
   }
 }

@@ -17,7 +17,7 @@ class AppShowcaseItem extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 350),
       curve: Curves.easeOutQuint,
-      height: 160,
+      height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         /*boxShadow: [
