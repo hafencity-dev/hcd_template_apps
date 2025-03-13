@@ -122,55 +122,67 @@ class _ShowcaseAppState extends State<ShowcaseApp>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MouseRegion(
-        onEnter: (event) {
-          setState(() {
-            _isMouseInside = true;
-            _mousePosition = event.position;
-          });
-        },
-        onHover: (event) {
-          setState(() {
-            _mousePosition = event.position;
-          });
-        },
-        onExit: (event) {
-          setState(() {
-            _isMouseInside = false;
-          });
-        },
-        child: Stack(
-          children: [
-            // Interactive animated background
-            InteractiveBackground(
-              controller: _controller,
-              externalMousePosition: _mousePosition,
-              externalMouseInside: _isMouseInside,
-            ),
+    // In mobile view, we want to force auto-switching regardless of user selection
+    bool isMobileView = MediaQuery.of(context).size.width <= 600;
+    if (isMobileView) {
+      _userSelected = false; // Always auto-switch in mobile view
+    }
 
-            // Main content
-            SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Showcase content
-                  Expanded(
-                    child: ResponsiveValue<Widget>(
-                      context,
-                      defaultValue: _buildMobileLayout(),
-                      conditionalValues: [
-                        Condition.largerThan(
-                          name: MOBILE,
-                          value: _buildDesktopLayout(),
-                        )
-                      ],
-                    ).value,
-                  ),
-                ],
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(16),
+        topRight: Radius.circular(16),
+      ),
+      child: Scaffold(
+        body: MouseRegion(
+          onEnter: (event) {
+            setState(() {
+              _isMouseInside = true;
+              _mousePosition = event.position;
+            });
+          },
+          onHover: (event) {
+            setState(() {
+              _mousePosition = event.position;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              _isMouseInside = false;
+            });
+          },
+          child: Stack(
+            children: [
+              // Interactive animated background
+              InteractiveBackground(
+                controller: _controller,
+                externalMousePosition: _mousePosition,
+                externalMouseInside: _isMouseInside,
               ),
-            ),
-          ],
+
+              // Main content
+              SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Showcase content
+                    Expanded(
+                      child: ResponsiveValue<Widget>(
+                        context,
+                        defaultValue: _buildMobileLayout(),
+                        conditionalValues: [
+                          Condition.largerThan(
+                            name: MOBILE,
+                            value: _buildDesktopLayout(),
+                          )
+                        ],
+                      ).value,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -198,91 +210,33 @@ class _ShowcaseAppState extends State<ShowcaseApp>
   }
 
   Widget _buildMobileLayout() {
-    // For mobile, we stack the components vertically
-    // App items in a grid (larger part) and app screen on bottom
-    return Column(
-      children: [
-        // App items section - now a responsive grid with vertical scrolling
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: LayoutBuilder(builder: (context, constraints) {
-                // Calculate columns based on available width
-                // We want items to be at least 150px wide
-                final double itemWidth = 150;
-                final int columns = (constraints.maxWidth / itemWidth).floor();
-                // Ensure we have at least 1 column
-                final int crossAxisCount = columns < 1 ? 1 : columns;
-
-                return StaggeredGrid.count(
-                  crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  children: List.generate(
-                    _showcaseItems.length,
-                    (index) => InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        setState(() {
-                          _selectedIndex = index;
-                          _previousItem = null;
-                          _userSelected =
-                              true; // User has manually selected an app
-                        });
-                      },
-                      child: AppShowcaseItem(
-                        showcaseItem: _showcaseItems[index],
-                        isSelected: _selectedIndex == index,
-                      ),
-                    )
-                        .animate()
-                        .fade(duration: 600.ms, delay: (200 * index).ms)
-                        .move(
-                          begin: const Offset(0.2, 0),
-                          end: Offset.zero,
-                          duration: 600.ms,
-                          delay: (200 * index).ms,
-                          curve: Curves.easeOutQuad,
-                        ),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ),
-
-        // App preview section (rest of the screen)
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 500),
-              opacity: 1.0,
-              child: AnimatedScale(
-                duration: const Duration(milliseconds: 400),
-                scale: 1.0,
-                curve: Curves.easeOutQuint,
-                child: SizedBox(
-                  width: 200, // Fixed width for phone display
-                  child: OverflowBox(
-                    maxHeight: double.infinity, // Allow overflow at bottom
-                    alignment: Alignment.topCenter,
-                    child: AspectRatio(
-                      aspectRatio: 9 / 19.5, // Standard phone aspect ratio
-                      child: FloatingAppScreen(
-                        showcaseItem: _showcaseItems[_selectedIndex],
-                      ),
-                    ),
+    // For mobile, we only show the app screen that automatically switches
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SizedBox(
+          width: 300, // Same width as desktop
+          child: OverflowBox(
+            maxHeight: double.infinity, // Allow overflow at bottom
+            alignment: Alignment.topCenter,
+            child: AspectRatio(
+              aspectRatio: 9 / 18, // Same aspect ratio as desktop
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 500),
+                opacity: 1.0,
+                child: AnimatedScale(
+                  duration: const Duration(milliseconds: 400),
+                  scale: 1.0,
+                  curve: Curves.easeOutQuint,
+                  child: FloatingAppScreen(
+                    showcaseItem: _showcaseItems[_selectedIndex],
                   ),
                 ),
               ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 
