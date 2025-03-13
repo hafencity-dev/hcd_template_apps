@@ -331,7 +331,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Dein Kontostand im Zeitverlauf',
+                              'Dein Kontostand',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -543,8 +543,8 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                               _buildQuickAction(
                                   'Mehr', Icons.grid_view, _primaryColor,
                                   delay: 1200.ms),
-                              _buildQuickAction(
-                                  'Einstellungen', Icons.settings, _primaryColor,
+                              _buildQuickAction('Einstellungen', Icons.settings,
+                                  _primaryColor,
                                   delay: 1300.ms),
                             ],
                           ),
@@ -570,7 +570,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                         Row(
                           children: [
                             const Text(
-                              'Neueste Transaktionen',
+                              'Transaktionen',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,

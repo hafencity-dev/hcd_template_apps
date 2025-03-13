@@ -81,7 +81,7 @@ class ProgressRing extends StatelessWidget {
           ),
         ),
         Text(
-          'Goal: $goal',
+          'Ziel: $goal',
           style: TextStyle(
             color: Colors.white.withOpacity(0.5),
             fontSize: 9,
