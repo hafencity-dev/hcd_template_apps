@@ -34,7 +34,7 @@ class NutritionTab extends StatelessWidget {
           child: Row(
             children: [
               const Text(
-                'Nutrition',
+                'Ernährung',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class NutritionTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(
-                  'Add Meal',
+                  'Mahlzeit hinzufügen',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class NutritionTab extends StatelessWidget {
 
               // Meals Heading
               const Text(
-                'Today\'s Meals',
+                'Heutige Mahlzeiten',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -87,10 +87,10 @@ class NutritionTab extends StatelessWidget {
 
               // Meal List
               _buildMealSection(
-                'Breakfast',
-                '08:30 AM',
+                'Frühstück',
+                '08:30 Uhr',
                 '420 kcal',
-                'Protein Oatmeal with Fruits',
+                'Protein-Haferbrei mit Früchten',
                 Icons.breakfast_dining,
                 Colors.orange,
                 delay: 200.ms,
@@ -99,10 +99,10 @@ class NutritionTab extends StatelessWidget {
               const SizedBox(height: 10),
 
               _buildMealSection(
-                'Lunch',
-                '01:15 PM',
+                'Mittagessen',
+                '13:15 Uhr',
                 '650 kcal',
-                'Grilled Chicken Salad',
+                'Gegrillter Hähnchensalat',
                 Icons.lunch_dining,
                 Colors.green,
                 delay: 250.ms,
@@ -112,9 +112,9 @@ class NutritionTab extends StatelessWidget {
 
               _buildMealSection(
                 'Snack',
-                '04:30 PM',
+                '16:30 Uhr',
                 '180 kcal',
-                'Protein Shake & Nuts',
+                'Protein-Shake & Nüsse',
                 Icons.cake,
                 Colors.purple,
                 delay: 300.ms,
@@ -159,7 +159,7 @@ class NutritionTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Daily Nutrition',
+                'Tägliche Ernährung',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.9),
                   fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class NutritionTab extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Today',
+                    'Heute',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontSize: 11,
@@ -197,8 +197,8 @@ class NutritionTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildNutrientProgress('Protein', 0.75, Colors.red, '75g'),
-              _buildNutrientProgress('Carbs', 0.6, Colors.green, '120g'),
-              _buildNutrientProgress('Fat', 0.45, Colors.yellow, '30g'),
+              _buildNutrientProgress('Kohlenh.', 0.6, Colors.green, '120g'),
+              _buildNutrientProgress('Fett', 0.45, Colors.yellow, '30g'),
             ],
           ),
 
@@ -209,7 +209,7 @@ class NutritionTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Calories Remaining',
+                'Verbleibende Kalorien',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.7),
                   fontSize: 12,
@@ -419,7 +419,7 @@ class NutritionTab extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Water Intake',
+                    'Wasseraufnahme',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),
                       fontWeight: FontWeight.bold,
@@ -509,7 +509,7 @@ class NutritionTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Meal Planning',
+            'Mahlzeitenplanung',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -540,7 +540,7 @@ class NutritionTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'New Weekly Meal Plan',
+                        'Neuer wöchentlicher Speiseplan',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -549,7 +549,7 @@ class NutritionTab extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Personalized meals based on your nutritional goals',
+                        'Personalisierte Mahlzeiten basierend auf deinen Ernährungszielen',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
                           fontSize: 10,
@@ -564,7 +564,7 @@ class NutritionTab extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          'View Plan',
+                          'Plan anzeigen',
                           style: TextStyle(
                             color: accentColor,
                             fontWeight: FontWeight.bold,

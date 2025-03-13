@@ -44,13 +44,13 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
   double _parallaxOffset = 0.0;
 
   final List<Map<String, dynamic>> _categories = [
-    {'name': 'All', 'icon': Icons.restaurant_menu},
+    {'name': 'Alle', 'icon': Icons.restaurant_menu},
     {'name': 'Pizza', 'icon': Icons.local_pizza},
     {'name': 'Burger', 'icon': Icons.lunch_dining},
     {'name': 'Sushi', 'icon': Icons.set_meal},
-    {'name': 'Salad', 'icon': Icons.eco},
-    {'name': 'Mexican', 'icon': Icons.restaurant},
-    {'name': 'Seafood', 'icon': Icons.set_meal},
+    {'name': 'Salat', 'icon': Icons.eco},
+    {'name': 'Mexikanisch', 'icon': Icons.restaurant},
+    {'name': 'Meeresfrüchte', 'icon': Icons.set_meal},
     {'name': 'Thai', 'icon': Icons.ramen_dining},
   ];
 
@@ -468,7 +468,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hungry?',
+                              'Hunger?',
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontSize: 12,
@@ -476,7 +476,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                             ),
                             const SizedBox(height: 2),
                             const Text(
-                              'Order delicious food',
+                              'Bestelle leckeres Essen',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -520,7 +520,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                'Search restaurants and dishes...',
+                                'Restaurants und Gerichte suchen...',
                                 style: TextStyle(
                                     color: Colors.grey.shade600, fontSize: 12),
                                 overflow: TextOverflow.ellipsis,
@@ -700,7 +700,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                                             ],
                                           ),
                                           child: Text(
-                                            'FEATURED',
+                                            'EMPFOHLEN',
                                             style: TextStyle(
                                               color: widget.showcaseItem.color,
                                               fontWeight: FontWeight.bold,
@@ -850,7 +850,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Text(
-                                                  'Order Now',
+                                                  'Jetzt Bestellen',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 11,
@@ -937,8 +937,8 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                         children: [
                           Text(
                             _selectedCategoryIndex == 0
-                                ? 'Nearby Restaurants'
-                                : '${_categories[_selectedCategoryIndex]['name']} Places',
+                                ? 'Restaurants in der Nähe'
+                                : '${_categories[_selectedCategoryIndex]['name']} Orte',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -947,7 +947,7 @@ class _FoodDeliveryAppScreenState extends State<FoodDeliveryAppScreen>
                           Row(
                             children: [
                               Text(
-                                'See All',
+                                'Alle anzeigen',
                                 style: TextStyle(
                                   color: widget.showcaseItem.color,
                                   fontWeight: FontWeight.w500,

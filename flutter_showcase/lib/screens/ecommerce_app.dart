@@ -32,36 +32,36 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
   String _searchQuery = '';
 
   final List<Map<String, dynamic>> _categories = [
-    {'name': 'All', 'icon': Icons.grid_view_rounded},
-    {'name': 'Clothing', 'icon': Icons.checkroom_rounded},
-    {'name': 'Electronics', 'icon': Icons.devices_rounded},
-    {'name': 'Accessories', 'icon': Icons.watch_rounded},
-    {'name': 'Home', 'icon': Icons.chair_rounded},
+    {'name': 'Alle', 'icon': Icons.grid_view_rounded},
+    {'name': 'Kleidung', 'icon': Icons.checkroom_rounded},
+    {'name': 'Elektronik', 'icon': Icons.devices_rounded},
+    {'name': 'Accessoires', 'icon': Icons.watch_rounded},
+    {'name': 'Zuhause', 'icon': Icons.chair_rounded},
   ];
 
   final List<Map<String, dynamic>> _banners = [
     {
-      'title': 'Summer Collection',
-      'subtitle': 'Discover our new styles',
-      'tag': 'NEW',
+      'title': 'Sommerkollektion',
+      'subtitle': 'Entdecke unsere neuen Styles',
+      'tag': 'NEU',
       'tagColor': Colors.blue,
-      'buttonText': 'Shop Now',
+      'buttonText': 'Jetzt Shoppen',
       'icon': Icons.checkroom_outlined,
     },
     {
-      'title': 'New Tech Arrivals',
-      'subtitle': 'Latest gadgets just in',
+      'title': 'Neue Tech-Artikel',
+      'subtitle': 'Neueste Gadgets gerade eingetroffen',
       'tag': 'HOT',
       'tagColor': Colors.orange,
-      'buttonText': 'View New Items',
+      'buttonText': 'Neue Artikel ansehen',
       'icon': Icons.devices_rounded,
     },
     {
-      'title': 'Special Offers',
-      'subtitle': 'Up to 50% off selected items',
+      'title': 'Sonderangebote',
+      'subtitle': 'Bis zu 50% Rabatt auf ausgewählte Artikel',
       'tag': 'SALE',
       'tagColor': Colors.red,
-      'buttonText': 'Shop Sale',
+      'buttonText': 'Angebote shoppen',
       'icon': Icons.local_offer_outlined,
     },
   ];
@@ -456,7 +456,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                           });
                         },
                         decoration: InputDecoration(
-                          hintText: 'Search products...',
+                          hintText: 'Produkte suchen...',
                           hintStyle: TextStyle(
                               color: Colors.grey.shade500, fontSize: 13),
                           border: InputBorder.none,
@@ -559,7 +559,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Text(
-            'Suggestions',
+            'Vorschläge',
             style: TextStyle(
               color: Colors.grey.shade700,
               fontWeight: FontWeight.w600,
@@ -628,7 +628,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
           child: Row(
             children: [
               Text(
-                'Results for ',
+                'Ergebnisse für ',
                 style: TextStyle(
                   color: Colors.grey.shade700,
                   fontWeight: FontWeight.w600,
@@ -737,7 +737,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
             ),
             child: Center(
               child: Text(
-                'View all results',
+                'Alle Ergebnisse anzeigen',
                 style: TextStyle(
                   color: widget.showcaseItem.color,
                   fontWeight: FontWeight.w600,
@@ -1076,8 +1076,8 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
               },
               child: Text(
                 _selectedCategoryIndex == 0
-                    ? 'Popular Products'
-                    : '${_categories[_selectedCategoryIndex]['name']} Products',
+                    ? 'Beliebte Produkte'
+                    : '${_categories[_selectedCategoryIndex]['name']} Produkte',
                 key: ValueKey<int>(_selectedCategoryIndex),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
@@ -1114,7 +1114,7 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'View All',
+                    'Alle anzeigen',
                     style: TextStyle(
                       color: widget.showcaseItem.color,
                       fontWeight: FontWeight.w600,
@@ -1148,31 +1148,31 @@ class _ECommerceAppScreenState extends State<ECommerceAppScreen>
       {
         'name': 'Premium T-Shirt',
         'icon': Icons.checkroom,
-        'price': '\$24.99',
+        'price': '24,99 €',
         'discount': '20%',
         'rating': 4.7,
         'category': 1, // Clothing
       },
       {
-        'name': 'Smart Watch',
+        'name': 'Smartwatch',
         'icon': Icons.watch,
-        'price': '\$89.99',
+        'price': '89,99 €',
         'discount': '',
         'rating': 4.9,
         'category': 3, // Accessories
       },
       {
-        'name': 'Travel Backpack',
+        'name': 'Reiserucksack',
         'icon': Icons.backpack,
-        'price': '\$49.99',
+        'price': '49,99 €',
         'discount': '10%',
         'rating': 4.6,
         'category': 1, // Clothing
       },
       {
-        'name': 'Wireless Headphones',
+        'name': 'Kabellose Kopfhörer',
         'icon': Icons.headphones,
-        'price': '\$79.99',
+        'price': '79,99 €',
         'discount': '',
         'rating': 4.8,
         'category': 2, // Electronics

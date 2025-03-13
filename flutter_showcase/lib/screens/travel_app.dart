@@ -49,7 +49,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
       'reviews': 324,
       'image': 'bali',
       'distance': '7,865 km',
-      'description': 'Experience lush landscapes, vibrant culture and pristine beaches on this tropical paradise.',
+      'description': 'Erlebe üppige Landschaften, lebendige Kultur und unberührte Strände in diesem tropischen Paradies.',
       'favorited': true,
       'filters': ['Beach', 'Nature', 'Cultural'],
     },
@@ -61,7 +61,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
       'reviews': 412,
       'image': 'kyoto',
       'distance': '9,420 km',
-      'description': 'Discover ancient temples, traditional gardens and authentic Japanese experiences.',
+      'description': 'Entdecke alte Tempel, traditionelle Gärten und authentische japanische Erlebnisse.',
       'favorited': false,
       'filters': ['Cultural', 'Historical', 'City'],
     },
@@ -73,7 +73,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
       'reviews': 289,
       'image': 'santorini',
       'distance': '3,570 km',
-      'description': 'Iconic white buildings, dramatic cliffs and breathtaking sunsets await.',
+      'description': 'Ikonische weiße Gebäude, dramatische Klippen und atemberaubende Sonnenuntergänge erwarten dich.',
       'favorited': true,
       'filters': ['Beach', 'Romantic', 'Island'],
     },
@@ -85,7 +85,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
       'reviews': 512,
       'image': 'maldives',
       'distance': '8,940 km',
-      'description': 'Crystal clear waters, overwater bungalows and world-class snorkeling experiences.',
+      'description': 'Kristallklares Wasser, Überwasserbungalows und erstklassige Schnorchelerlebnisse.',
       'favorited': false,
       'filters': ['Beach', 'Luxury', 'Romantic'],
     },
@@ -93,27 +93,27 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
   
   final List<Map<String, dynamic>> _experiences = [
     {
-      'title': 'Mountain Trekking',
-      'location': 'Swiss Alps',
-      'duration': '3 days',
+      'title': 'Bergwanderung',
+      'location': 'Schweizer Alpen',
+      'duration': '3 Tage',
       'price': '450',
       'image': 'trekking',
       'color': const Color(0xFF5B61F4),
       'icon': Icons.landscape_rounded,
     },
     {
-      'title': 'Desert Safari',
+      'title': 'Wüstensafari',
       'location': 'Dubai',
-      'duration': '1 day',
+      'duration': '1 Tag',
       'price': '120',
       'image': 'safari',
       'color': const Color(0xFFFF4767),
       'icon': Icons.terrain_rounded,
     },
     {
-      'title': 'Diving Adventure',
+      'title': 'Tauchabenteuer',
       'location': 'Great Barrier Reef',
-      'duration': '2 days',
+      'duration': '2 Tage',
       'price': '380',
       'image': 'diving',
       'color': const Color(0xFF00D0B0),
@@ -121,18 +121,18 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
     },
   ];
   
-  final List<String> _filters = ['All', 'Popular', 'Beach', 'Mountain', 'City', 'Cultural', 'Adventure'];
+  final List<String> _filters = ['Alle', 'Beliebt', 'Strand', 'Berg', 'Stadt', 'Kultur', 'Abenteuer'];
   
   final List<String> _recentSearches = [
-    'Bali, Indonesia',
-    'Tokyo, Japan',
-    'Beach Resorts',
+    'Bali, Indonesien',
+    'Tokio, Japan',
+    'Strand Resorts',
   ];
   
   final List<String> _popularSearches = [
-    'Paris, France',
+    'Paris, Frankreich',
     'New York, USA',
-    'Mountain Retreats',
+    'Bergunterkünfte',
   ];
   
   @override
@@ -302,7 +302,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    "Search destinations...",
+                    "Reiseziele suchen...",
                     style: TextStyle(
                       color: _textSecondaryColor,
                       fontSize: 12,
@@ -355,7 +355,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Featured Destinations",
+                      "Ausgewählte Reiseziele",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -371,7 +371,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: const Text(
-                        "See All",
+                        "Alle anzeigen",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -424,7 +424,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Popular Experiences",
+                  "Beliebte Erlebnisse",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -440,7 +440,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: const Text(
-                    "Explore",
+                    "Entdecken",
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -520,7 +520,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                       fontSize: 12,
                     ),
                     decoration: InputDecoration(
-                      hintText: "Search destinations...",
+                      hintText: "Reiseziele suchen...",
                       hintStyle: TextStyle(
                         color: _textSecondaryColor,
                         fontSize: 12,
@@ -568,7 +568,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Recent Searches",
+                      "Letzte Suchen",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -586,7 +586,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                         minimumSize: Size.zero,
                       ),
                       child: Text(
-                        "Clear",
+                        "Löschen",
                         style: TextStyle(
                           fontSize: 11,
                           color: _primaryColor,
@@ -603,7 +603,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
               ],
               
               Text(
-                "Popular Searches",
+                "Beliebte Suchen",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -619,7 +619,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
               
               // Filter chips for quick access
               Text(
-                "Quick Filters",
+                "Schnellfilter",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -1011,7 +1011,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "From",
+                          "Ab",
                           style: TextStyle(
                             fontSize: 10,
                             color: _textSecondaryColor,
@@ -1041,7 +1041,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                         visualDensity: VisualDensity.compact,
                       ),
                       child: const Text(
-                        "Book Now",
+                        "Jetzt buchen",
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -1202,7 +1202,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                     Divider(color: _dividerColor),
                     const SizedBox(height: 6),
                     Text(
-                      "About this experience",
+                      "Über dieses Erlebnis",
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -1211,7 +1211,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "Immerse yourself in this unique adventure and create unforgettable memories. Our experienced guides will ensure your safety while you enjoy this amazing experience.",
+                      "Tauche ein in dieses einzigartige Abenteuer und schaffe unvergessliche Erinnerungen. Unsere erfahrenen Guides sorgen für deine Sicherheit, während du dieses erstaunliche Erlebnis genießt.",
                       style: TextStyle(
                         fontSize: 11,
                         height: 1.3,
@@ -1227,7 +1227,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "What's included:",
+                                "Inklusive:",
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -1235,9 +1235,9 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              _buildIncludedItem("Equipment"),
-                              _buildIncludedItem("Guide"),
-                              _buildIncludedItem("Photos"),
+                              _buildIncludedItem("Ausrüstung"),
+                              _buildIncludedItem("Reiseführer"),
+                              _buildIncludedItem("Fotos"),
                             ],
                           ),
                         ),
@@ -1255,7 +1255,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                             visualDensity: VisualDensity.compact,
                           ),
                           child: const Text(
-                            "Book",
+                            "Buchen",
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -1346,7 +1346,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  "Summer Special",
+                  "Sommer-Special",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -1355,7 +1355,7 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "Get 15% off on your first booking",
+                  "Erhalte 15% Rabatt auf deine erste Buchung",
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.white,
@@ -1412,10 +1412,10 @@ class _TravelAppScreenState extends State<TravelAppScreen> with SingleTickerProv
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.explore, "Explore", true),
-            _buildNavItem(Icons.favorite_border, "Saved", false),
-            _buildNavItem(Icons.local_activity_outlined, "Bookings", false),
-            _buildNavItem(Icons.person_outline, "Profile", false),
+            _buildNavItem(Icons.explore, "Entdecken", true),
+            _buildNavItem(Icons.favorite_border, "Favoriten", false),
+            _buildNavItem(Icons.local_activity_outlined, "Buchungen", false),
+            _buildNavItem(Icons.person_outline, "Profil", false),
           ],
         ),
       ),

@@ -110,7 +110,7 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
           
           // Title
           const Text(
-            'NOW PLAYING',
+            'SPIELT JETZT',
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -557,7 +557,7 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Up Next',
+                  'Als Nächstes',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -573,7 +573,7 @@ class _MusicAppScreenState extends State<MusicAppScreen> with SingleTickerProvid
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      '${_tracks.length} songs',
+                      '${_tracks.length} Lieder',
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.6),
                         fontSize: 12,

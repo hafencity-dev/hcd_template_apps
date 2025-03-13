@@ -22,7 +22,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
   late AnimationController _cardAnimationController;
   late Color _primaryColor;
 
-  final List<String> _months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  final List<String> _months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'];
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Good morning',
+                              'Guten Morgen',
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: 11,
@@ -253,7 +253,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'AVAILABLE BALANCE',
+                                      'VERFÜGBARES GUTHABEN',
                                       style: TextStyle(
                                         color: Colors.white.withOpacity(0.7),
                                         fontSize: 9,
@@ -331,7 +331,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Your balance over time',
+                              'Dein Kontostand im Zeitverlauf',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -501,7 +501,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                         Row(
                           children: [
                             const Text(
-                              'Quick actions',
+                              'Schnellaktionen',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -529,22 +529,22 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                                 .none, // Important: Prevent clipping of shadows
                             children: [
                               _buildQuickAction(
-                                  'Send', Icons.north_east, _primaryColor,
+                                  'Senden', Icons.north_east, _primaryColor,
                                   delay: 800.ms),
                               _buildQuickAction(
-                                  'Request', Icons.south_west, _primaryColor,
+                                  'Anfordern', Icons.south_west, _primaryColor,
                                   delay: 900.ms),
                               _buildQuickAction(
-                                  'Cards', Icons.credit_card, _primaryColor,
+                                  'Karten', Icons.credit_card, _primaryColor,
                                   delay: 1000.ms),
                               _buildQuickAction(
-                                  'Stats', Icons.bar_chart, _primaryColor,
+                                  'Statistik', Icons.bar_chart, _primaryColor,
                                   delay: 1100.ms),
                               _buildQuickAction(
-                                  'More', Icons.grid_view, _primaryColor,
+                                  'Mehr', Icons.grid_view, _primaryColor,
                                   delay: 1200.ms),
                               _buildQuickAction(
-                                  'Settings', Icons.settings, _primaryColor,
+                                  'Einstellungen', Icons.settings, _primaryColor,
                                   delay: 1300.ms),
                             ],
                           ),
@@ -570,7 +570,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                         Row(
                           children: [
                             const Text(
-                              'Recent transactions',
+                              'Neueste Transaktionen',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -586,7 +586,7 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
-                                'See all',
+                                'Alle anzeigen',
                                 style: TextStyle(
                                   color: _primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -612,33 +612,33 @@ class _BankingAppScreenState extends State<BankingAppScreen>
                             physics: const BouncingScrollPhysics(),
                             children: [
                               _buildTransactionItem(
-                                'Starbucks Coffee',
-                                'Today, 9:32 AM',
-                                '-€4.50',
+                                'Starbucks Kaffee',
+                                'Heute, 9:32 Uhr',
+                                '-€4,50',
                                 Icons.coffee,
                                 Colors.brown,
                                 delay: 1200.ms,
                               ),
                               _buildTransactionItem(
-                                'Amazon Shopping - Electronics',
-                                'Yesterday, 5:20 PM',
-                                '-€67.30',
+                                'Amazon Shopping - Elektronik',
+                                'Gestern, 17:20 Uhr',
+                                '-€67,30',
                                 Icons.shopping_cart_outlined,
                                 Colors.amber.shade800,
                                 delay: 1300.ms,
                               ),
                               _buildTransactionItem(
-                                'Local Grocery Store',
-                                'Yesterday, 3:15 PM',
-                                '-€28.75',
+                                'Lebensmittelgeschäft',
+                                'Gestern, 15:15 Uhr',
+                                '-€28,75',
                                 Icons.shopping_basket,
                                 Colors.green,
                                 delay: 1400.ms,
                               ),
                               _buildTransactionItem(
-                                'Salary Deposit - March',
-                                'Mar 1, 10:00 AM',
-                                '+€2,450.00',
+                                'Gehaltseingang - März',
+                                'Mär 1, 10:00 Uhr',
+                                '+€2.450,00',
                                 Icons.account_balance,
                                 _primaryColor,
                                 delay: 1500.ms,
