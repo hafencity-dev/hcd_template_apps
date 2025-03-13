@@ -19,7 +19,7 @@ class AppShowcaseItem extends StatelessWidget {
       curve: Curves.easeOutQuint,
       height: 100,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         /*boxShadow: [
           BoxShadow(
             color: showcaseItem.color.withOpacity(isSelected ? 0.35 : 0.1),
@@ -58,7 +58,7 @@ class AppShowcaseItem extends StatelessWidget {
                     height: 60,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       showcaseItem.icon,
@@ -125,7 +125,7 @@ class AppShowcaseItem extends StatelessWidget {
                       color: Colors.white.withOpacity(0.6),
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 )
                     .animate(target: isSelected ? 1 : 0)

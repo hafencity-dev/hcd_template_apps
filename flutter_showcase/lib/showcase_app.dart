@@ -49,42 +49,42 @@ class _ShowcaseAppState extends State<ShowcaseApp>
       ShowcaseItem(
         title: 'Fitness',
         description: 'Interaktive Diagramme und Statistiken',
-        color: Colors.green.shade900,
+        color: const Color(0xFF339966), // Medium green from palette
         icon: Icons.fitness_center_rounded,
         type: AppType.fitness,
       ),
       ShowcaseItem(
         title: 'Shop',
         description: 'Schöne UI mit flüssigen Animationen',
-        color: Colors.blue.shade900,
+        color: const Color(0xFF6699CC), // Medium blue from palette
         icon: Icons.shopping_bag_rounded,
         type: AppType.ecommerce,
       ),
       ShowcaseItem(
         title: 'Banking',
         description: 'Sicheres und responsives Design',
-        color: Colors.purple.shade900,
+        color: const Color(0xFF275C42), // Deep green from palette
         icon: Icons.account_balance_rounded,
         type: AppType.banking,
       ),
       ShowcaseItem(
         title: 'Essenslieferung',
         description: 'Ansprechende Animationen und einfache Navigation',
-        color: Colors.orange.shade900,
+        color: const Color(0xFFFC8811), // Orange from vibrant palette
         icon: Icons.delivery_dining_rounded,
         type: AppType.foodDelivery,
       ),
       ShowcaseItem(
         title: 'Reisen',
         description: 'Immersives Erlebnis mit 3D-Effekten',
-        color: Colors.teal.shade900,
+        color: const Color(0xFF2C8769), // Teal green from palette
         icon: Icons.travel_explore_rounded,
         type: AppType.travel,
       ),
       ShowcaseItem(
         title: 'Musik',
         description: 'Immersiver Player mit Audiovisualisierung',
-        color: Colors.pink.shade900,
+        color: const Color(0xFFDEB71D), // Mustard yellow from palette
         icon: Icons.music_note_rounded,
         type: AppType.music,
       ),
