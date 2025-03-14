@@ -61,6 +61,13 @@ class _ShowcaseAppState extends State<ShowcaseApp>
         type: AppType.recipe,
       ),
       ShowcaseItem(
+        title: 'Projektmanager',
+        description: 'Elegantes dunkles Design mit Projekt-Tracking',
+        color: const Color(0xFF3A3A5A), // Dark blue-purple
+        icon: Icons.work_outline_rounded,
+        type: AppType.projectManagement,
+      ),
+      ShowcaseItem(
         title: 'Shop',
         description: 'Schöne UI mit flüssigen Animationen',
         color: const Color(0xFF6699CC), // Medium blue from palette

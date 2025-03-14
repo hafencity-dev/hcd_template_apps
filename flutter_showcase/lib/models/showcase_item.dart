@@ -8,6 +8,7 @@ enum AppType {
   travel,
   music,
   recipe,
+  projectManagement,
   generic
 }
 

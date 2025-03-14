@@ -132,8 +132,8 @@ class HomeTab extends StatelessWidget {
 
               // Recipe Collections
               _buildRecipeCollections(),
-
-              const SizedBox(height: 60), // Bottom padding for FAB
+              
+              const SizedBox(height: 20), // Standard bottom padding
             ],
           ),
         ),
@@ -170,6 +170,9 @@ class HomeTab extends StatelessWidget {
                     fontSize: 12,
                     letterSpacing: 0.5,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
                 ),
                 const SizedBox(height: 4),
                 const Text(
@@ -181,6 +184,7 @@ class HomeTab extends StatelessWidget {
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  softWrap: true,
                 ),
               ],
             ),
@@ -301,6 +305,9 @@ class HomeTab extends StatelessWidget {
                 color: Colors.black87,
                 letterSpacing: 0.2,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
             ),
             TextButton(
               onPressed: () {},
@@ -445,6 +452,7 @@ class HomeTab extends StatelessWidget {
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  softWrap: true,
                 ),
                 const SizedBox(height: 6),
                 Wrap(
@@ -534,6 +542,9 @@ class HomeTab extends StatelessWidget {
             color: Colors.black87,
             letterSpacing: 0.2,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
         ),
         const SizedBox(height: 12),
         SingleChildScrollView(
@@ -627,6 +638,7 @@ class HomeTab extends StatelessWidget {
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            softWrap: true,
           ),
           const SizedBox(height: 2),
           Text(
@@ -635,6 +647,9 @@ class HomeTab extends StatelessWidget {
               fontSize: 11,
               color: Colors.grey[600],
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
           ),
         ],
       ),

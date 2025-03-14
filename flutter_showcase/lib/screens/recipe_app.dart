@@ -87,8 +87,6 @@ class _RecipeAppScreenState extends State<RecipeAppScreen> {
           child: _screens[_selectedIndex],
         ),
         bottomNavigationBar: _buildBottomNav(lightBgColor),
-        //floatingActionButton: _buildFloatingActionButton(),
-        //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -149,30 +147,4 @@ class _RecipeAppScreenState extends State<RecipeAppScreen> {
     );
   }
 
-  Widget _buildFloatingActionButton() {
-    return Container(
-      height: 54,
-      width: 54,
-      child: FloatingActionButton(
-        onPressed: () {
-          // Show a snackbar when FAB is pressed in the demo
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Neues Rezept hinzufügen'),
-              backgroundColor: widget.showcaseItem.color,
-              behavior: SnackBarBehavior.floating,
-              duration: const Duration(seconds: 1),
-            ),
-          );
-        },
-        backgroundColor: widget.showcaseItem.color,
-        elevation: 4,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 24,
-        ),
-      ),
-    );
-  }
 }

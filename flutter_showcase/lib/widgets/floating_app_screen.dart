@@ -9,6 +9,7 @@ import '../screens/food_delivery_app.dart' deferred as food_delivery;
 import '../screens/travel_app.dart' deferred as travel;
 import '../screens/music_app.dart' deferred as music;
 import '../screens/recipe_app.dart' deferred as recipe;
+import '../screens/project_management_app.dart' deferred as project_management;
 
 class FloatingAppScreen extends StatefulWidget {
   final ShowcaseItem showcaseItem;
@@ -64,6 +65,9 @@ class _FloatingAppScreenState extends State<FloatingAppScreen> {
         break;
       case AppType.recipe:
         await recipe.loadLibrary();
+        break;
+      case AppType.projectManagement:
+        await project_management.loadLibrary();
         break;
       case AppType.generic:
         // No library to load for generic case
@@ -216,6 +220,9 @@ class _FloatingAppScreenState extends State<FloatingAppScreen> {
         return music.MusicAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.recipe:
         return recipe.RecipeAppScreen(showcaseItem: widget.showcaseItem);
+      case AppType.projectManagement:
+        return project_management.ProjectManagementAppScreen(
+            showcaseItem: widget.showcaseItem);
       case AppType.generic:
         return _buildGenericApp();
     }
