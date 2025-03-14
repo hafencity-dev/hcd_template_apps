@@ -1,21 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../models/showcase_item.dart';
-import '../screens/ecommerce_app.dart';
-import '../screens/banking_app.dart';
-import '../screens/fitness_app.dart';
-import '../screens/food_delivery_app.dart';
-import '../screens/travel_app.dart';
-import '../screens/music_app.dart';
+// Using deferred imports to improve initial load times
+import '../screens/ecommerce_app.dart' deferred as ecommerce;
+import '../screens/banking_app.dart' deferred as banking;
+import '../screens/fitness_app.dart' deferred as fitness;
+import '../screens/food_delivery_app.dart' deferred as food_delivery;
+import '../screens/travel_app.dart' deferred as travel;
+import '../screens/music_app.dart' deferred as music;
 
-class FloatingAppScreen extends StatelessWidget {
+class FloatingAppScreen extends StatefulWidget {
   final ShowcaseItem showcaseItem;
 
   const FloatingAppScreen({
     super.key,
     required this.showcaseItem,
   });
+
+  @override
+  State<FloatingAppScreen> createState() => _FloatingAppScreenState();
+}
+
+class _FloatingAppScreenState extends State<FloatingAppScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLibrary();
+  }
+
+  @override
+  void didUpdateWidget(FloatingAppScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.showcaseItem.type != widget.showcaseItem.type) {
+      setState(() {
+        _isLoading = true;
+      });
+      _loadLibrary();
+    }
+  }
+
+  Future<void> _loadLibrary() async {
+    switch (widget.showcaseItem.type) {
+      case AppType.ecommerce:
+        await ecommerce.loadLibrary();
+        break;
+      case AppType.banking:
+        await banking.loadLibrary();
+        break;
+      case AppType.fitness:
+        await fitness.loadLibrary();
+        break;
+      case AppType.foodDelivery:
+        await food_delivery.loadLibrary();
+        break;
+      case AppType.travel:
+        await travel.loadLibrary();
+        break;
+      case AppType.music:
+        await music.loadLibrary();
+        break;
+      case AppType.generic:
+        // No library to load for generic case
+        break;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +132,7 @@ class FloatingAppScreen extends StatelessWidget {
                     );
                   },
                   child: KeyedSubtree(
-                    key: ValueKey<String>(showcaseItem.title),
+                    key: ValueKey<String>(widget.showcaseItem.title),
                     child: _buildAppContent(),
                   ),
                 ),
@@ -95,7 +151,7 @@ class FloatingAppScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(36),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withAlpha(77),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -135,24 +191,49 @@ class FloatingAppScreen extends StatelessWidget {
   }
 
   Widget _buildAppContent() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+
     // Select the appropriate app UI based on the showcase item type
-    switch (showcaseItem.type) {
+    switch (widget.showcaseItem.type) {
       case AppType.ecommerce:
-        return ECommerceAppScreen(showcaseItem: showcaseItem);
+        return ecommerce.ECommerceAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.banking:
-        return BankingAppScreen(showcaseItem: showcaseItem);
+        return banking.BankingAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.fitness:
-        return FitnessAppScreen(showcaseItem: showcaseItem);
+        return fitness.FitnessAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.foodDelivery:
-        return FoodDeliveryAppScreen(showcaseItem: showcaseItem);
+        return food_delivery.FoodDeliveryAppScreen(
+            showcaseItem: widget.showcaseItem);
       case AppType.travel:
-        return TravelAppScreen(showcaseItem: showcaseItem);
+        return travel.TravelAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.music:
-        return MusicAppScreen(showcaseItem: showcaseItem);
+        return music.MusicAppScreen(showcaseItem: widget.showcaseItem);
       case AppType.generic:
-      default:
         return _buildGenericApp();
     }
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Lädt...",
+              style: TextStyle(
+                color: widget.showcaseItem.color,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildGenericApp() {
@@ -163,13 +244,13 @@ class FloatingAppScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              showcaseItem.icon,
+              widget.showcaseItem.icon,
               size: 60,
-              color: showcaseItem.color,
+              color: widget.showcaseItem.color,
             ),
             const SizedBox(height: 16),
             Text(
-              showcaseItem.title,
+              widget.showcaseItem.title,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -177,10 +258,10 @@ class FloatingAppScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              showcaseItem.description,
+              widget.showcaseItem.description,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey.shade600,
+                color: Colors.grey[600],
                 fontSize: 16,
               ),
             ),
