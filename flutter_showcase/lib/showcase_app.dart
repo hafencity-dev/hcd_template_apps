@@ -68,7 +68,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
         type: AppType.ecommerce,
       ),
       ShowcaseItem(
-        title: 'Banking',
+        title: 'Finanzen',
         description: 'Moderne UI mit realistischen Kartenanimationen',
         color: const Color(0xFF48BB78), // N26-inspired teal color
         icon: Icons.account_balance_rounded,
@@ -273,7 +273,7 @@ class _ShowcaseAppState extends State<ShowcaseApp>
                 child: LayoutBuilder(builder: (context, constraints) {
                   // Calculate columns based on available width
                   // We want items to be at least 180px wide for desktop
-                  final double itemWidth = 180;
+                  final double itemWidth = 200;
                   final int columns =
                       (constraints.maxWidth / itemWidth).floor();
                   // Ensure we have at least 1 column, maximum 4 columns
