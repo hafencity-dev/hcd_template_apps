@@ -54,6 +54,13 @@ class _ShowcaseAppState extends State<ShowcaseApp>
         type: AppType.fitness,
       ),
       ShowcaseItem(
+        title: 'Rezepte',
+        description: 'Interaktive Kochbuch mit Schritt-für-Schritt Anleitungen',
+        color: const Color(0xFFE53935), // Deep red color
+        icon: Icons.restaurant_rounded,
+        type: AppType.recipe,
+      ),
+      ShowcaseItem(
         title: 'Shop',
         description: 'Schöne UI mit flüssigen Animationen',
         color: const Color(0xFF6699CC), // Medium blue from palette

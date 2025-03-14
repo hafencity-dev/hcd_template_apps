@@ -7,6 +7,7 @@ enum AppType {
   foodDelivery,
   travel,
   music,
+  recipe,
   generic
 }
 
