@@ -139,7 +139,8 @@ class ProfileTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[200]!, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -203,13 +204,15 @@ class ProfileTab extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
+            letterSpacing: 0.2,
           ),
         ),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey[200]!, width: 1),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
@@ -260,13 +263,15 @@ class ProfileTab extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
+            letterSpacing: 0.2,
           ),
         ),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey[200]!, width: 1),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),

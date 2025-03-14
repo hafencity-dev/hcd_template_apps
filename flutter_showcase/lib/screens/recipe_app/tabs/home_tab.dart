@@ -147,6 +147,14 @@ class HomeTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: mainColor,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: mainColor.withOpacity(0.3), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: mainColor.withOpacity(0.1),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -169,7 +177,7 @@ class HomeTab extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -314,7 +322,7 @@ class HomeTab extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 150,
+          height: 155,
           child: ListView(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
@@ -351,12 +359,20 @@ class HomeTab extends StatelessWidget {
 
   Widget _buildFeaturedRecipe() {
     return Container(
-      height: 180,
+      height: 185,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         gradient: primaryGradient,
+        border: Border.all(color: mainColor.withOpacity(0.3), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: mainColor.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      clipBehavior: Clip.none,
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
           // Food illustration element
@@ -571,9 +587,10 @@ class HomeTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[200]!, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),

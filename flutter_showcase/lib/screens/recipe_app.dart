@@ -22,7 +22,7 @@ class RecipeAppScreen extends StatefulWidget {
 class _RecipeAppScreenState extends State<RecipeAppScreen> {
   int _selectedIndex = 0;
 
-  // Recipe data 
+  // Recipe data
   final int _recipesViewed = 15;
   final int _recipesSaved = 8;
   final int _dishesCooked = 5;
@@ -87,8 +87,8 @@ class _RecipeAppScreenState extends State<RecipeAppScreen> {
           child: _screens[_selectedIndex],
         ),
         bottomNavigationBar: _buildBottomNav(lightBgColor),
-        floatingActionButton: _buildFloatingActionButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        //floatingActionButton: _buildFloatingActionButton(),
+        //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -130,18 +130,15 @@ class _RecipeAppScreenState extends State<RecipeAppScreen> {
           children: [
             Icon(
               icon,
-              color: isSelected
-                  ? widget.showcaseItem.color
-                  : Colors.grey[400],
+              color: isSelected ? widget.showcaseItem.color : Colors.grey[400],
               size: 20,
             ),
             const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? widget.showcaseItem.color
-                    : Colors.grey[400],
+                color:
+                    isSelected ? widget.showcaseItem.color : Colors.grey[400],
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
